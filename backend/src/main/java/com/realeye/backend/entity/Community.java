@@ -2,24 +2,26 @@ package com.realeye.backend.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class AdminUser {
+@Builder
+public class Community {
 
     @TableId(type = IdType.AUTO)
     private Integer id;
 
-    private String username;
+    private Integer parentId;
 
-    private String password;
+    private Integer user_id;
+
+    private String content;
 
     private Date createTime;
+
+    private Boolean active;
 
 }
