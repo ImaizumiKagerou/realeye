@@ -1,10 +1,10 @@
-package com.realeye.backend.utils.jwt.impl;
+package com.realeye.frontend.utils.jwt.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.realeye.backend.entity.AdminUser;
-import com.realeye.backend.service.AdminService;
-import com.realeye.backend.utils.jwt.JWTConstant;
-import com.realeye.backend.utils.jwt.JwtUserDetails;
+import com.realeye.frontend.entity.User;
+import com.realeye.frontend.service.UserService;
+import com.realeye.frontend.utils.jwt.JWTConstant;
+import com.realeye.frontend.utils.jwt.JwtUserDetails;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -17,13 +17,13 @@ import javax.annotation.Resource;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Resource
-    private AdminService adminService;
+    private UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        QueryWrapper<AdminUser> wrapper = new QueryWrapper<>();
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username", username);
-        AdminUser one = adminService.getOne(wrapper);
+        User one = userService.getOne(wrapper);
         if (one == null) {
             throw new UsernameNotFoundException("该用户不存在");
         }
