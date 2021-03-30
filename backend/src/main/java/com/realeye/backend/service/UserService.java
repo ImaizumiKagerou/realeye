@@ -5,3 +5,4 @@ import com.realeye.backend.entity.User;
 
 public interface UserService extends IService<User> {
 }
+

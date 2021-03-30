@@ -5,3 +5,7 @@ import com.realeye.backend.entity.APIKey;
 
 public interface APIKeyService extends IService<APIKey> {
 }
+
+
+
+
