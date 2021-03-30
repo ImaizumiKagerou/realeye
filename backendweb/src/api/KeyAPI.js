@@ -17,7 +17,7 @@ axios.interceptors.request.use(
     }
 );
 
-export const getKeyList = (pageNum,pageSize,activeStatus,username,apikey) =>{
+export const getKeyList = (pageNum, pageSize, activeStatus, username, apikey) => {
     return axios.get(
         store.state.base_url + "apikey/getList",
         {
@@ -32,12 +32,35 @@ export const getKeyList = (pageNum,pageSize,activeStatus,username,apikey) =>{
     )
 }
 
-export const addKey = (username,expireTime)=>{
+export const addKey = (username, expireTime) => {
     return axios.get(
-        store.state.base_url + "apikey/saveKey",
+        store.state.base_url + "apikey/addKey",
         {
-            params:{
+            params: {
                 username,
+                expireTime
+            }
+        }
+    )
+}
+
+export const resetKey = (id) => {
+    return axios.get(
+        store.state.base_url + "apikey/resetKey",
+        {
+            params: {
+                id,
+            }
+        }
+    )
+}
+
+export const updateExpireTime = (keyId,expireTime) => {
+    return axios.get(
+        store.state.base_url + "apikey/updateKey",
+        {
+            params: {
+                keyId,
                 expireTime
             }
         }

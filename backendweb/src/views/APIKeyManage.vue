@@ -26,8 +26,8 @@
           header-cell-class-name="table-header"
       >
         <el-table-column label="用户名" prop="username"></el-table-column>
-        <el-table-column label="Key" prop="apikey"></el-table-column>
-        <el-table-column align="center" label="状态">
+        <el-table-column label="Key" prop="apikey" width="275"></el-table-column>
+        <el-table-column align="center" label="状态" width="100">
           <template #default="scope">
             <el-tag
                 :type="
@@ -43,13 +43,13 @@
         </el-table-column>
 
         <el-table-column :formatter="formatDate" label="申请时间" prop="createTime"></el-table-column>
-        <el-table-column :formatter="formatDate" label="过期时间" prop="expireTime"></el-table-column>
+        <el-table-column :formatter="formatDate2Date" label="过期时间" prop="expireTime"></el-table-column>
         <el-table-column align="center" label="操作" width="280">
           <template #default="scope">
-            <el-button type="primary">
+            <el-button type="primary" @click="handleReset(scope.row.id)">
               重置Key
             </el-button>
-            <el-button type="primary">
+            <el-button type="primary" @click="handleEdit(scope.row.id)">
               修改过期时间
             </el-button>
           </template>
@@ -67,14 +67,30 @@
       </div>
     </div>
 
-    <!-- 编辑弹出框 -->
+    <!-- 修改弹出框 -->
+    <el-dialog v-model="editVisible" title="修改过期时间" width="30%">
+      <el-form ref="form" :model="editForm" label-width="70px">
+        <el-form-item label="过期时间">
+          <el-date-picker v-model="editForm.expireTime" :shortcuts="shortcuts" placeholder="选择日期"
+                          type="date"></el-date-picker>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+                <span class="dialog-footer">
+                    <el-button @click="cancelEdit">取 消</el-button>
+                    <el-button type="primary" @click="saveEdit">确 定</el-button>
+                </span>
+      </template>
+    </el-dialog>
+
+    <!-- 新增弹出框 -->
     <el-dialog v-model="addVisible" title="新增" width="30%">
-      <el-form ref="form" :model="form" label-width="70px">
+      <el-form ref="form" :model="addForm" label-width="70px">
         <el-form-item label="用户名">
-          <el-input v-model="form.username"></el-input>
+          <el-input v-model="addForm.username"></el-input>
         </el-form-item>
         <el-form-item label="过期时间">
-          <el-date-picker v-model="form.expireTime" :shortcuts="shortcuts" placeholder="选择日期"
+          <el-date-picker v-model="addForm.expireTime" :shortcuts="shortcuts" placeholder="选择日期"
                           type="date"></el-date-picker>
         </el-form-item>
       </el-form>
@@ -89,8 +105,8 @@
 </template>
 
 <script>
-import {formatDate} from "@/api";
-import {addKey, getKeyList} from "@/api/KeyAPI"
+import {formatDate,formatDate2Date} from "@/api";
+import {addKey, getKeyList, resetKey, updateExpireTime} from "@/api/KeyAPI"
 
 export default {
   name: "APIKeyManage",
@@ -104,13 +120,11 @@ export default {
         pageSize: 2
       },
       tableData: [],
-      multipleSelection: [],
-      delList: [],
       addVisible: false,
+      editVisible: false,
       pageTotal: 0,
-      form: {},
-      idx: -1,
-      id: -1,
+      addForm: {},
+      editForm: {},
       shortcuts: [
         {
           text: '今天',
@@ -139,8 +153,45 @@ export default {
     this.getData();
   },
   methods: {
+    saveEdit() {
+      let _self = this;
+      updateExpireTime(this.editForm.keyId, this.editForm.expireTime).then((res) => {
+        if (res.data.code === 200) {
+          _self.$message.success(`修改成功`);
+          this.getData();
+          this.editVisible = false;
+          this.editForm = {};
+        } else {
+          _self.$message.error(res.data.message);
+        }
+      })
+    },
+    cancelEdit() {
+      this.editVisible = false;
+      this.editForm = {};
+    },
+    handleEdit(keyId) {
+      this.editForm.keyId = keyId;
+      this.editVisible = true;
+    },
+    handleReset(id) {
+      let _self = this;
+      this.$confirm(
+          "确定要重置吗？",
+          "警告",
+          {
+            type: "warning"
+          })
+          .then(() => {
+            resetKey(id).then((res) => {
+              _self.getData();
+            })
+          })
+          .catch(() => {
+          });
+    },
     formatDate,
-    // 获取 easy-mock 的模拟数据
+    formatDate2Date,
     getData() {
       getKeyList(this.query.pageIndex, this.query.pageSize, this.query.activeStatus, this.query.name, this.query.apikey).then(res => {
         this.tableData = res.data.data.records;
@@ -159,17 +210,18 @@ export default {
     // 取消新增
     cancelAdd() {
       this.addVisible = false;
-      this.form = {};
+      this.addForm = {};
     },
     // 保存新增
     saveAdd() {
       let _self = this;
-      addKey(this.form.username, this.form.expireTime).then((res) => {
+      addKey(this.addForm.username, this.addForm.expireTime).then((res) => {
         if (res.data.code === 200) {
-          _self.$message.success(`修改成功`);
+          _self.$message.success(`新增成功`);
           this.addVisible = false;
+          this.addForm = {};
         } else {
-          _self.$message.success(res.data.message);
+          _self.$message.error(res.data.message);
         }
       })
     },

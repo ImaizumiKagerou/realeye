@@ -9,6 +9,7 @@ import com.realeye.backend.service.APIKeyService;
 import com.realeye.backend.service.UserService;
 import com.realeye.backend.utils.ResultBody;
 import com.realeye.backend.utils.TimeUtils;
+import com.realeye.backend.utils.annotation.StringTrim;
 import io.swagger.annotations.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -37,6 +38,7 @@ public class APIKeyController {
     private UserService userService;
 
     @GetMapping("/getList")
+    @StringTrim
     public ResultBody getList(@NotNull Integer pageNum, @NotNull Integer pageSize, String username, String apikey, Integer activeStatus) {
 
         Page<APIKey> page = new Page<>(pageNum, pageSize);
@@ -61,11 +63,8 @@ public class APIKeyController {
         return ResultBody.newSuccessInstance(apiKeyPage);
     }
 
-    @GetMapping("/saveKey")
-    public ResultBody updateKey(
-            @NotNull String username,
-            @NotNull @RequestParam("expireTime") String expireTimeStr) throws ParseException {
-
+    @GetMapping("/addKey")
+    public ResultBody addKey(@NotNull String username, @NotNull @RequestParam("expireTime") String expireTimeStr) throws ParseException {
         Date expireTime = TimeUtils.String2DateAndAddOneDay(expireTimeStr);
 
         QueryWrapper<User> q = new QueryWrapper<>();
@@ -75,18 +74,39 @@ public class APIKeyController {
             return ResultBody.newErrorInstance(403, "查无此人");
         }
 
-        UpdateWrapper<APIKey> wrapper = new UpdateWrapper<>();
-        wrapper.eq("user_id", one.getId());
-        wrapper.set("expire_time", expireTime);
-        System.out.println("wrapper.getSqlSet() = " + wrapper.getSqlSet());
-
         APIKey build = APIKey.builder()
                 .userId(one.getId())
                 .username(one.getUsername())
                 .expireTime(expireTime)
                 .apikey(UUID.randomUUID().toString().replaceAll("-", ""))
                 .build();
-        apiKeyService.saveOrUpdate(build, wrapper);
+
+        apiKeyService.save(build);
+
+        return ResultBody.newSuccessInstance();
+    }
+
+    @GetMapping("/updateKey")
+    public ResultBody updateKey(
+            @NotNull Integer keyId,
+            @NotNull @RequestParam("expireTime") String expireTimeStr) throws ParseException {
+
+        Date expireTime = TimeUtils.String2DateAndAddOneDay(expireTimeStr);
+
+        UpdateWrapper<APIKey> u = new UpdateWrapper<>();
+        u.set("expire_time", expireTime);
+        u.eq("id", keyId);
+        apiKeyService.update(u);
+
+        return ResultBody.newSuccessInstance();
+    }
+
+    @GetMapping("/resetKey")
+    public ResultBody resetKey(@NotNull Integer id) {
+        UpdateWrapper<APIKey> wrapper = new UpdateWrapper<>();
+        wrapper.eq("id", id);
+        wrapper.set("apikey", UUID.randomUUID().toString().replaceAll("-", ""));
+        apiKeyService.update(wrapper);
         return ResultBody.newSuccessInstance();
     }
 
