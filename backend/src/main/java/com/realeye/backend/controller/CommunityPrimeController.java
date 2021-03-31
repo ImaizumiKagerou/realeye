@@ -14,8 +14,8 @@ import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 
 @RestController
-@RequestMapping("/community")
-public class CommunityController {
+@RequestMapping("/communityPrime")
+public class CommunityPrimeController {
 
     @Resource
     private CommunityService communityService;
@@ -29,6 +29,8 @@ public class CommunityController {
         Page<Community> list = communityService.page(page, wrapper);
         return ResultBody.newSuccessInstance(list);
     }
+
+
 
     @GetMapping("/delete")
     public ResultBody delete(@NotNull Integer id) {

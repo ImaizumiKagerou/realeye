@@ -51,12 +51,6 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
                     if (phone == null) {
                         log.error("获取用户账号为空");
                     }
-                    //TODO
-//                    Set<String> userPermissions = userManager.getUserPermissions(phone);
-//                    List<GrantedAuthority> authorities = new ArrayList<>();
-//                    for (String str:userPermissions) {
-//                        authorities.add(new GrantedAuthorityImpl(str));
-//                    }
                     authentication = new JwtAuthenticatioToken(phone, null, null, token);
                 }
             } else {

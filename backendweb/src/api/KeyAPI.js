@@ -5,7 +5,6 @@ axios.interceptors.request.use(
     config => {
         // console.log(config)
         // 自定义header信息（比如token）
-        // console.log("请求拦截器添加userId-----------",sessionStorage.userId)
         if (!config.headers['jwtToken']) {
             config.headers['jwtToken'] = localStorage.getItem("jwtToken");
         }

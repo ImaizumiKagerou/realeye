@@ -34,6 +34,28 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    @GetMapping("/register")
+    public ResultBody register(@NotNull String username, @NotNull String password, HttpServletRequest request) {
+
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        wrapper.eq("username", username);
+        User one = userService.getOne(wrapper);
+        if (one == null) {
+            return ResultBody.newErrorInstance(403, "用户名已被使用");
+        }
+
+        User build = User.builder()
+                .username(username)
+                .password(password)
+                .build();
+
+        userService.save(build);
+
+        JwtAuthenticatioToken jwtAuthenticatioToken = SecurityUtil.login(request, username, "fakePassword", authenticationManager, JSON.toJSONString(one));
+
+        return ResultBody.newSuccessInstance(jwtAuthenticatioToken.getToken());
+    }
+
     @ApiOperation("登陆")
     @GetMapping("/login")
     public ResultBody login(@NotNull String username, @NotNull String password, HttpServletRequest request) {
@@ -52,7 +74,7 @@ public class UserController {
     @GetMapping("/info")
     @ApiOperation("用户信息")
     @JwtTokenInit
-    public ResultBody getInfo(@ApiIgnore JWTToken jwtToken){
+    public ResultBody getInfo(@ApiIgnore JWTToken jwtToken) {
         return ResultBody.newSuccessInstance();
     }
 
