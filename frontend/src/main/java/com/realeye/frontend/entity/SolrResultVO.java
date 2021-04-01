@@ -21,4 +21,6 @@ public class SolrResultVO {
 
     private Long updateTime;
 
+    private String title;
+
 }

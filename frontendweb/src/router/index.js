@@ -26,7 +26,7 @@ const routes = [
     {
         path: '/search/:words',
         name: 'search',
-        component: () => import('../views/Home.vue'),
+        component: () => import('../views/Search.vue'),
         meta: { title: '搜索', params: 'words'}
     },
     {

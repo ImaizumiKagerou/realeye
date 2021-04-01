@@ -66,8 +66,6 @@ public class SearchController {
             solrQuery.setFields(sb.toString());
         }
 
-        log.info(solrQuery.toString());
-
         List<SolrResultVO> list = new ArrayList<>();
 
         QueryResponse response = solrClient.query(solrQuery);
@@ -88,9 +86,13 @@ public class SearchController {
             if (null != listMap) {
                 solrResultVO.setContent(listMap.get("content").get(0));
             }
+            String[] s = solrResultVO.getIdStr().split("_");
+            solrResultVO.setTitle(s[0]);
         });
 
         MyPageVO myPageVO = MyPageVO.builder()
+                .currPage(pageNum)
+                .hasNextPage(response.getResults().getNumFound()-response.getResults().getStart()>pageSize)
                 .total(response.getResults().getNumFound())
                 .data(list)
                 .build();

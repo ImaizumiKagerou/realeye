@@ -4,18 +4,21 @@
             <template v-if="isHome">
                 <!--博主信息-->
                 <div class="focusinfo">
-                    <!-- 头像 -->
-                    <div class="header-tou">
-                        <router-link to="/"><img :src="websiteInfo.avatar"></router-link>
-                    </div>
+<!--                    &lt;!&ndash; 头像 &ndash;&gt;-->
+<!--                    <div class="header-tou">-->
+<!--                        <router-link to="/"><img :src="websiteInfo.avatar"></router-link>-->
+<!--                    </div>-->
                     <!-- 简介 -->
-                    <div class="header-info">
-                        <p>{{websiteInfo.slogan}}</p>
+                    <div class="header-info" @click="clickSearch">
+<!--                      <div style="float: left">-->
+                        <header-search ref="a"/>
+<!--                      </div>-->
+<!--                        <p>{{websiteInfo.slogan}}</p>-->
                     </div>
-                    <!-- 社交信息 -->
-                    <div class="top-social">
-                        <div v-for="item in socials" :key="item.id" :title="item.title"><a :href="item.href" target="_blank" :style="{'color':item.color}"><i class="iconfont" :class="item.icon"></i></a></div>
-                    </div>
+<!--                    &lt;!&ndash; 社交信息 &ndash;&gt;-->
+<!--                    <div class="top-social">-->
+<!--                        <div v-for="item in socials" :key="item.id" :title="item.title"><a :href="item.href" target="_blank" :style="{'color':item.color}"><i class="iconfont" :class="item.icon"></i></a></div>-->
+<!--                    </div>-->
                 </div>
                 <!--左右倾斜-->
                 <div class="slant-left"></div>
@@ -26,6 +29,8 @@
 </template>
 
 <script>
+    import HeaderSearch from "@/components/header-search";
+
     export default {
         name: "banner",
         data(){
@@ -34,6 +39,7 @@
                 socials: []
             }
         },
+        components: {HeaderSearch},
         props:{
             src:{
                 type: String,
@@ -58,6 +64,9 @@
                 this.$store.dispatch('getSiteInfo').then(data =>{
                     this.websiteInfo = data
                 })
+            },
+            clickSearch(){
+              this.$refs.a.click();
             }
         }
     }

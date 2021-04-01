@@ -15,4 +15,8 @@ public class MyPageVO {
 
     private Object data;
 
+    private Integer currPage;
+
+    private boolean hasNextPage;
+
 }

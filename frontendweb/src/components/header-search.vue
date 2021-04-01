@@ -26,7 +26,8 @@
         methods:{
             search(){
                 // console.log(this.searchValue)
-                this.$router.push({name:'search',params:{words:this.searchValue}});
+                const searchKeywords  = this.searchValue.trim().replaceAll(" ","+");
+                this.$router.push({name:'search',params:{words:searchKeywords}});
                 this.close()
             },
             click(){
@@ -62,7 +63,7 @@
         width: 0;
         transition: .2s all;
         &.show{
-            width: 200px;
+            width: 350px;
             margin-left: 10px;
         }
         &:focus{

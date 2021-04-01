@@ -20,7 +20,7 @@
               </div>
               <div class="input">
                 <span aria-hidden="true" class="fa fa-key"></span>
-                <input v-model="logindata.password" name="password" placeholder="密码" required type="password"/>
+                <input v-model="logindata.password" name="password" placeholder="密码" required type="password" @keyup.enter="login"/>
               </div>
               <button class="btn submit" type="button" @click="login">登 录</button>
               <!--              <a class="bottom-text-w3ls" for="option3" href="#">忘记密码?</a>-->
