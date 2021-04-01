@@ -72,10 +72,6 @@
       <div class="clear"></div>
     </div>
 
-    <!--    <div class="copyright">-->
-    <!--      <h2>Copyright &copy; 2019 - {{ nowYear }} 版权所有| by <a href="#">anonymous</a></h2>-->
-    <!--    </div>-->
-
   </div>
 </template>
 

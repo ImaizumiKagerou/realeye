@@ -1,20 +1,15 @@
 <template>
   <div class="home">
     <div class="site-content animate">
-      <!--通知栏-->
-      <div class="notify">
-        <div v-if="hideSlogan" class="search-result">
-          <span v-if="searchWords">搜索结果："{{ searchWords.replaceAll("+", " ") }}" 相关文章</span>
-          <span v-else-if="category">分类 "{{ category }}" 相关文章</span>
-        </div>
-        <quote v-else>{{ notice }}</quote>
-      </div>
+
 
       <!--文章列表-->
       <main :class="{'search':hideSlogan}" class="site-main">
-        <section-title v-if="!hideSlogan">推荐</section-title>
+        <span style="top: 100px;">
+          <el-button v-if="$store.state.isLogin" @click.native="showCommunitiesDialog()">发帖</el-button>
+        </span>
         <template v-for="item in postList">
-          <SearchResultListItem :key="item.id" :post="item"></SearchResultListItem>
+          <CommunityListItem :key="item.id" :post="item"></CommunityListItem>
         </template>
       </main>
 
@@ -23,6 +18,24 @@
         <div class="more-btn" @click="loadMore">More</div>
       </div>
     </div>
+
+    <el-dialog :visible.sync="dialogVisible" title="发送新帖" width="50%">
+      <el-form ref="form" :model="dialog" label-width="70px">
+        <el-form-item label="标题">
+          <el-input v-model="dialog.title" required></el-input>
+        </el-form-item>
+        <el-form-item label="内容">
+          <el-input v-model="dialog.content" required type="textarea"></el-input>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+          <span class="dialog-footer">
+              <el-button @click="cancelFatie">取 消</el-button>
+              <el-button type="primary" @click="saveFatie">确 定</el-button>
+          </span>
+      </template>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -32,18 +45,24 @@ import sectionTitle from '@/components/section-title'
 import Post from '@/components/post'
 import SmallIco from '@/components/small-ico'
 import Quote from '@/components/quote'
-import SearchResultListItem from '@/components/SearchResultListItem'
+import CommunityListItem from '@/components/CommunityListItem'
 import {SearchAPIMethod} from '@/api/SearchAPI';
 import {fetchList} from "@/api";
+import {AddCommunity, CommunityListMethod} from '@/api/CommunityAPI'
 
 export default {
-  name: 'Search',
+  name: 'Communities',
   props: ['cate', 'words'],
   data() {
     return {
       postList: [],
       currPage: 1,
-      hasNextPage: false
+      hasNextPage: false,
+      dialogVisible: false,
+      dialog: {
+        title: undefined,
+        content: undefined
+      }
     }
   },
   components: {
@@ -52,7 +71,7 @@ export default {
     Post,
     SmallIco,
     Quote,
-    SearchResultListItem
+    CommunityListItem
   },
   computed: {
     searchWords() {
@@ -69,19 +88,46 @@ export default {
     }
   },
   methods: {
+    saveFatie() {
+      const _self = this;
+      AddCommunity(this.dialog.title, this.dialog.content).then((res) => {
+        if (res.data.code === 200) {
+          _self.$message.success("发送成功");
+          _self.cancelFatie();
+        } else {
+          _self.$message.error(res.data.message);
+        }
+      })
+    },
+    cancelFatie() {
+      this.dialogVisible = false;
+      this.dialog.title = undefined;
+      this.dialog.content = undefined;
+    },
+    showCommunitiesDialog() {
+      this.dialogVisible = true;
+    },
     fetchList() {
-      SearchAPIMethod(1, 5, this.$route.params.words).then((res) => {
+      CommunityListMethod(this.currPage,5).then((res) => {
         console.log(res);
         this.postList = res.data.data.data || [];
         this.currPage = res.data.data.currPage;
         this.hasNextPage = res.data.data.hasNextPage;
       })
+      // fetchList().then(res => {
+      //   this.postList = res.data.items || []
+      //   this.currPage = res.data.page
+      //   this.hasNextPage = res.data.hasNextPage
+      // }).catch(err => {
+      //   console.log(err)
+      // })
     },
     loadMore() {
-      fetchList({page:this.currPage+1}).then(res => {
-        this.postList = this.postList.concat(res.data.items || [])
-        this.currPage = res.data.page
-        this.hasNextPage = res.data.hasNextPage
+      SearchAPIMethod(this.currPage + 1, 5, this.$route.params.words).then((res) => {
+        console.log(res);
+        this.postList = this.postList.concat(res.data.data.data || []);
+        this.currPage = res.data.data.currPage;
+        this.hasNextPage = res.data.data.hasNextPage;
       })
     }
   },
@@ -91,6 +137,11 @@ export default {
 }
 </script>
 <style lang="less" scoped>
+
+el-button {
+  position: fixed;
+  top: 100px;
+}
 
 .site-content {
   .notify {

@@ -2,8 +2,11 @@ package com.realeye.frontend.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.realeye.frontend.entity.APIKey;
 import com.realeye.frontend.entity.User;
 import com.realeye.frontend.service.UserService;
+import com.realeye.frontend.service.impl.APIKeyService;
 import com.realeye.frontend.utils.ResultBody;
 import com.realeye.frontend.utils.jwt.JWTToken;
 import com.realeye.frontend.utils.jwt.JwtAuthenticatioToken;
@@ -20,7 +23,9 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @RestController
 @RequestMapping("/user")
@@ -33,6 +38,9 @@ public class UserController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private APIKeyService apiKeyService;
 
     @GetMapping("/register")
     public ResultBody register(@NotNull String username, @NotNull String password, HttpServletRequest request) {
@@ -47,6 +55,7 @@ public class UserController {
         User build = User.builder()
                 .username(username)
                 .password(password)
+                .lastLoginTime(new Date())
                 .build();
 
         userService.save(build);
@@ -68,6 +77,11 @@ public class UserController {
         }
         JwtAuthenticatioToken jwtAuthenticatioToken = SecurityUtil.login(request, username, "fakePassword", authenticationManager, JSON.toJSONString(one));
 
+        UpdateWrapper<User> u = new UpdateWrapper<>();
+        u.eq("id", one.getId());
+        u.set("last_login_time", new Date());
+        userService.update(u);
+
         return ResultBody.newSuccessInstance(jwtAuthenticatioToken.getToken());
     }
 
@@ -75,6 +89,33 @@ public class UserController {
     @ApiOperation("用户信息")
     @JwtTokenInit
     public ResultBody getInfo(@ApiIgnore JWTToken jwtToken) {
+
+        QueryWrapper<User> q = new QueryWrapper<>();
+        q.eq("id", jwtToken.getId());
+        q.select("id", "username", "email", "last_login_time");
+        User one = userService.getOne(q);
+
+        QueryWrapper<APIKey> qw = new QueryWrapper<>();
+        qw.eq("user_id", jwtToken.getId());
+        qw.eq("active", true);
+        APIKey apiKey = apiKeyService.getOne(qw);
+        if (apiKey != null) {
+            one.setApikey(apiKey.getApikey());
+            one.setExpireTime(apiKey.getExpireTime());
+        }
+
+        return ResultBody.newSuccessInstance(one);
+    }
+
+    @GetMapping("/bindEmail")
+    @JwtTokenInit
+    public ResultBody bindEmail(@Email String email, @ApiIgnore JWTToken jwtToken) {
+
+        UpdateWrapper<User> u = new UpdateWrapper<>();
+        u.set("email", email);
+        u.eq("id", jwtToken.getId());
+        userService.update(u);
+
         return ResultBody.newSuccessInstance();
     }
 

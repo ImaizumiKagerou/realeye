@@ -9,43 +9,49 @@ const routes = [
         path: '/',
         name: 'home',
         component: () => import('../views/Home.vue'),
-        meta: { title: '首页'}
+        meta: {title: '首页'}
     },
     {
         path: "/login",
         name: "login",
-        component: ()=> import('../views/Login'),
+        component: () => import('../views/Login'),
         meta: {title: '登陆'}
     },
     {
         path: '/category/:cate',
         name: 'category',
         component: () => import('../views/Home.vue'),
-        meta: { title: '分类', params: 'cate'}
+        meta: {title: '分类', params: 'cate'}
     },
     {
         path: '/search/:words',
         name: 'search',
         component: () => import('../views/Search.vue'),
-        meta: { title: '搜索', params: 'words'}
+        meta: {title: '搜索', params: 'words'}
     },
     {
         path: '/about',
         name: 'about',
-        component: () => import('../views/About.vue'),
-        meta: { title: '关于'}
+        component: () => import('../views/MyAbout.vue'),
+        meta: {title: '关于'}
     },
     {
         path: '/friend',
         name: 'friend',
         component: () => import('../views/Friend.vue'),
-        meta: { title: '友链'}
+        meta: {title: '友链'}
+    },
+    {
+        path: '/communities',
+        name: 'communities',
+        component: () => import('../views/Communities.vue'),
+        meta: {title: '社区'}
     },
     {
         path: '/article/:id',
         name: 'article',
         component: () => import('../views/Articles.vue'),
-        meta: { title: '文章'}
+        meta: {title: '文章'}
     }
 ]
 
@@ -56,9 +62,9 @@ const router = new VueRouter({
 })
 router.beforeEach((to, from, next) => {
     let title = 'RealEye'
-    if (to.meta.params){
+    if (to.meta.params) {
         title = `${to.meta.title}:${to.params[to.meta.params] || ''} - ${title}`
-    }else {
+    } else {
         title = `${to.meta.title} - ${title}`
     }
     document.title = title

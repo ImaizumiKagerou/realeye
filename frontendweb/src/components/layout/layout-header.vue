@@ -25,13 +25,13 @@
         </div>
       </div>
       <div class="menu-item">
-        <router-link to="/friend">社区</router-link>
+        <router-link to="/communities">社区</router-link>
       </div>
       <div class="menu-item" v-if="$store.state.isLogin">
         <router-link to="/about">我的</router-link>
       </div>
       <div class="menu-item" v-if="$store.state.isLogin">
-        <a href="" @click="logout">登出</a>
+        <router-link to="/login" @click="logout">登出</router-link>
       </div>
       <div class="menu-item" v-if="!$store.state.isLogin">
         <router-link to="/login">注册/登陆</router-link>

@@ -1,16 +1,20 @@
 <template>
   <article class="post post-list">
     <div class="post-entry">
+      <div class="feature">
+        <p>{{post.username}}</p>
+      </div>
       <h1 class="entry-title">
-        <p>类型: {{ post.title }}</p>
+        <router-link :to="'/Community/'+post.id">
+          <p>{{ post.title }}</p>
+        </router-link>
       </h1>
       <div class="p-time">
-        <i class="iconfont iconmeditor-time"></i> {{ post.updateTime | parseTime }}<i v-if="post.isHot"
+        <i class="iconfont iconmeditor-time"></i> {{ post.createTimeL | parseTime }}<i v-if="post.isHot"
                                                                                       class="iconfont iconfire"
                                                                                       style="margin-left: 5px;color: #ff6d6d;"></i>
       </div>
-      <p class="summary" v-html="'严重程度: '+post.stamp+'<br>具体内容: '+post.content">
-      </p>
+      <p class="summary">{{post.content}}</p>
     </div>
     <hr/>
   </article>
@@ -19,7 +23,7 @@
 <script>
 
 export default {
-  name: "SearchResultListItem",
+  name: "CommunityListItem",
   props: {
     post: {
       type: Object

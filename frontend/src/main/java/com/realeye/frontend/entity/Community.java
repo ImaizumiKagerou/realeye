@@ -11,10 +11,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "community")
-@Builder
 public class Community {
     @TableId(value = "id", type = IdType.INPUT)
     private Integer id;
@@ -24,6 +24,9 @@ public class Community {
 
     @TableField(value = "user_id")
     private Integer userId;
+
+    @TableField(value = "username")
+    private String username;
 
     @TableField(value = "title")
     private String title;
@@ -39,4 +42,8 @@ public class Community {
 
     @TableField(value = "prime")
     private Boolean prime;
+
+    @TableField(exist = false)
+    private Long createTimeL;
+
 }

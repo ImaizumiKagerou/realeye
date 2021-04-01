@@ -1,5 +1,15 @@
 import request from '@/utils/request'
 
+export const formatDate = (data) => {
+    let dt = new Date(data)
+    return dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate() + ' ' + dt.getHours() + ':' + dt.getMinutes() + ':' + dt.getSeconds()
+};
+
+export const formatDate2Date = (data) => {
+    let dt = new Date(data)
+    return dt.getFullYear() + '-' + (dt.getMonth() + 1) + '-' + dt.getDate();
+};
+
 export function fetchList(params) {
     return request({
         url: '/post/list',

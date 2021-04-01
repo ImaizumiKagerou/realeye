@@ -16,11 +16,11 @@ axios.interceptors.request.use(
     }
 );
 
-export const LoginAPIMethod = (username,password)=>{
+export const LoginAPIMethod = (username, password) => {
     return axios.get(
-        store.state.base_url+"user/login",
+        store.state.base_url + "user/login",
         {
-            params:{
+            params: {
                 username,
                 password
             }
@@ -28,14 +28,31 @@ export const LoginAPIMethod = (username,password)=>{
     )
 }
 
-export const RegisterAPIMethod = (username,password)=>{
+export const RegisterAPIMethod = (username, password) => {
     return axios.get(
-        store.state.base_url+"user/register",
+        store.state.base_url + "user/register",
         {
-            params:{
+            params: {
                 username,
                 password
             }
         }
+    )
+}
+
+export const BindEmailMethod = (email) => {
+    return axios.get(
+        store.state.base_url + "user/bindEmail",
+        {
+            params: {
+                email
+            }
+        }
+    )
+}
+
+export const GetUserInfo = () => {
+    return axios.get(
+        store.state.base_url + "user/info",
     )
 }

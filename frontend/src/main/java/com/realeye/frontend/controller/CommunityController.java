@@ -3,6 +3,7 @@ package com.realeye.frontend.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.realeye.frontend.entity.Community;
+import com.realeye.frontend.entity.MyPageVO;
 import com.realeye.frontend.service.CommunityService;
 import com.realeye.frontend.utils.ResultBody;
 import com.realeye.frontend.utils.jwt.JWTToken;
@@ -17,6 +18,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.annotation.Resource;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("/community")
@@ -36,7 +38,21 @@ public class CommunityController {
         Page<Community> page = new Page<>(pageNum, pageSize);
         Page<Community> list = communityService.page(page, wrapper);
 
-        return ResultBody.newSuccessInstance(list);
+        list.getRecords().forEach(new Consumer<Community>() {
+            @Override
+            public void accept(Community community) {
+                community.setCreateTimeL(community.getCreateTime().getTime());
+            }
+        });
+
+        MyPageVO build = MyPageVO.builder()
+                .data(list.getRecords())
+                .hasNextPage(list.hasNext())
+                .currPage(pageNum)
+                .total(list.getTotal())
+                .build();
+
+        return ResultBody.newSuccessInstance(build);
 
     }
 
@@ -48,6 +64,7 @@ public class CommunityController {
                 .content(content)
                 .active(true)
                 .userId(jwtToken.getId())
+                .username(jwtToken.getUsername())
                 .parentId(0)
                 .prime(false)
                 .build();

@@ -11,19 +11,19 @@
                 <quote v-else>{{notice}}</quote>
             </div>
 
-            <!--焦点图-->
-            <div class="top-feature" v-if="!hideSlogan">
-                <section-title>
-                    <div style="display: flex;align-items: flex-end;">聚焦<small-ico></small-ico></div>
-                </section-title>
-                <div class="feature-content">
-                    <div class="feature-item" v-for="item in features" :key="item.title">
-                        <Feature :data="item"></Feature>
-                    </div>
-                </div>
-            </div>
+<!--            &lt;!&ndash;焦点图&ndash;&gt;-->
+<!--            <div class="top-feature" v-if="!hideSlogan">-->
+<!--                <section-title>-->
+<!--                    <div style="display: flex;align-items: flex-end;">聚焦<small-ico></small-ico></div>-->
+<!--                </section-title>-->
+<!--                <div class="feature-content">-->
+<!--                    <div class="feature-item" v-for="item in features" :key="item.title">-->
+<!--                        <Feature :data="item"></Feature>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
             <!--文章列表-->
-            <main class="site-main" :class="{'search':hideSlogan}">
+            <main class="site-main" style="padding-top: 0" :class="{'search':hideSlogan}">
                 <section-title v-if="!hideSlogan">推荐</section-title>
                 <template v-for="item in postList">
                     <post :post="item" :key="item.id"></post>

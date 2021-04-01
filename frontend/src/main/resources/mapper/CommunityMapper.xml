@@ -7,6 +7,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="parent_id" jdbcType="INTEGER" property="parentId" />
     <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -15,6 +16,6 @@
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, parent_id, user_id, title, content, create_time, active, prime
+    id, parent_id, user_id, username, title, content, create_time, active, prime
   </sql>
 </mapper>
