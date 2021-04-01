@@ -1,7 +1,9 @@
 package com.realeye.frontend.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.realeye.frontend.entity.Comment;
 import com.realeye.frontend.entity.Community;
 import com.realeye.frontend.entity.MyPageVO;
 import com.realeye.frontend.service.CommunityService;
@@ -18,7 +20,10 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.annotation.Resource;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/community")
@@ -56,6 +61,22 @@ public class CommunityController {
 
     }
 
+    @GetMapping("/info")
+    public ResultBody getInfo(@NotNull Integer id) {
+
+        UpdateWrapper<Community> u = new UpdateWrapper<>();
+        u.setSql("watch_count = watch_count + 1");
+        u.eq("id", id);
+        communityService.update(u);
+
+        QueryWrapper<Community> q = new QueryWrapper<>();
+        q.eq("id", id);
+        Community one = communityService.getOne(q);
+
+        return ResultBody.newSuccessInstance(one);
+
+    }
+
     @JwtTokenInit
     @GetMapping("/add")
     public ResultBody addCommunity(@NotBlank String title, @NotBlank String content, @ApiIgnore JWTToken jwtToken) {
@@ -70,6 +91,28 @@ public class CommunityController {
                 .build();
         communityService.save(build);
         return ResultBody.newSuccessInstance();
+    }
+
+    @GetMapping("/getComment")
+    public ResultBody getComment(@NotNull Integer id) {
+
+        QueryWrapper<Community> q = new QueryWrapper<>();
+        q.eq("parent_id", id);
+        List<Community> list = communityService.list(q);
+        List<Comment> collect = list.stream().map(new Function<Community, Comment>() {
+            @Override
+            public Comment apply(Community community) {
+                Comment build = Comment.builder()
+                        .id(community.getId())
+                        .fromUserName(community.getUsername())
+                        .content(community.getContent())
+                        .createTime(community.getCreateTime().getTime())
+                        .build();
+                return build;
+            }
+        }).collect(Collectors.toList());
+
+        return ResultBody.newSuccessInstance(collect);
     }
 
     @JwtTokenInit

@@ -6,7 +6,7 @@
       <!--文章列表-->
       <main :class="{'search':hideSlogan}" class="site-main">
         <span style="top: 100px;">
-          <el-button v-if="$store.state.isLogin" @click.native="showCommunitiesDialog()">发帖</el-button>
+          <el-button v-if="$store.state.isLogin" @click="showCommunitiesDialog()">发帖</el-button>
         </span>
         <template v-for="item in postList">
           <CommunityListItem :key="item.id" :post="item"></CommunityListItem>

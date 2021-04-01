@@ -39,3 +39,25 @@ export const CommunityListMethod = (pageNum, pageSize) => {
         }
     )
 }
+
+export const CommunityArticleInfoByIdMethod = (id) => {
+    return axios.get(
+        store.state.base_url + "community/info",
+        {
+            params: {
+                id
+            }
+        }
+    )
+}
+
+export const CommunityArticleCommentByIdMethod = (id) => {
+    return axios.get(
+        store.state.base_url + "community/getComment",
+        {
+            params: {
+                id
+            }
+        }
+    )
+}

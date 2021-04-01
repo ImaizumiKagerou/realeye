@@ -48,6 +48,12 @@ const routes = [
         meta: {title: '社区'}
     },
     {
+        path: '/community/:id',
+        name: 'community',
+        component: () => import('../views/Community.vue'),
+        meta: {title: 'article', params: 'id'}
+    },
+    {
         path: '/article/:id',
         name: 'article',
         component: () => import('../views/Articles.vue'),

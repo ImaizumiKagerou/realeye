@@ -10,12 +10,14 @@
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="watch_count" jdbcType="INTEGER" property="watchCount" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="active" jdbcType="BOOLEAN" property="active" />
     <result column="prime" jdbcType="BOOLEAN" property="prime" />
   </resultMap>
   <sql id="Base_Column_List">
     <!--@mbg.generated-->
-    id, parent_id, user_id, username, title, content, create_time, active, prime
+    id, parent_id, user_id, username, title, content, watch_count, create_time, active, 
+    prime
   </sql>
 </mapper>

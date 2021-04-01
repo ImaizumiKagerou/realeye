@@ -14,13 +14,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName(value = "community")
-public class Community {
+@TableName(value = "apikey")
+public class APIKey {
     @TableId(value = "id", type = IdType.INPUT)
     private Integer id;
-
-    @TableField(value = "parent_id")
-    private Integer parentId;
 
     @TableField(value = "user_id")
     private Integer userId;
@@ -28,25 +25,15 @@ public class Community {
     @TableField(value = "username")
     private String username;
 
-    @TableField(value = "title")
-    private String title;
-
-    @TableField(value = "content")
-    private String content;
-
-    @TableField(value = "watch_count")
-    private Integer watchCount;
+    @TableField(value = "apikey")
+    private String apikey;
 
     @TableField(value = "create_time")
     private Date createTime;
 
+    @TableField(value = "expire_time")
+    private Date expireTime;
+
     @TableField(value = "active")
     private Boolean active;
-
-    @TableField(value = "prime")
-    private Boolean prime;
-
-    @TableField(exist = false)
-    private Long createTimeL;
-
 }
