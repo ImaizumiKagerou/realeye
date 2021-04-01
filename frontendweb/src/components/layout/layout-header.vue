@@ -27,10 +27,13 @@
       <div class="menu-item">
         <router-link to="/friend">社区</router-link>
       </div>
-      <div class="menu-item" v-if="isLogin">
+      <div class="menu-item" v-if="$store.state.isLogin">
         <router-link to="/about">我的</router-link>
       </div>
-      <div class="menu-item" v-if="!isLogin">
+      <div class="menu-item" v-if="$store.state.isLogin">
+        <a href="" @click="logout">登出</a>
+      </div>
+      <div class="menu-item" v-if="!$store.state.isLogin">
         <router-link to="/login">注册/登陆</router-link>
       </div>
     </div>
@@ -50,7 +53,8 @@ export default {
       fixed: false,
       hidden: false,
       category: [],
-      mobileShow: false
+      mobileShow: false,
+      isLogin: false
     }
   },
   mounted() {
@@ -80,11 +84,10 @@ export default {
       }).catch(err => {
         console.log(err)
       })
-    }
-  },
-  computed:{
-    isLogin(){
-      return localStorage.getItem("jwtToken");
+    },
+    logout(){
+      this.$store.commit("removeLoginTokenStorage");
+      this.$router.push("/");
     }
   }
 }

@@ -1,17 +1,19 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {getTimeInterval} from '../utils/index'
-import {fetchSocial,fetchSiteInfo} from '@/api'
+import {fetchSiteInfo, fetchSocial} from '@/api'
 
 Vue.use(Vuex)
 // 略:后台获取系统运行时间
 const runAt = '1589878800000';
 let timer = null;
 const state = {
+    base_url: "http://127.0.0.1:8081/frontend/",
     loading: false,
     runTimeInterval: '',
     socials: '',
-    websiteInfo: ''
+    websiteInfo: '',
+    isLogin: false
 }
 const mutations = {
     SET_LOADING: (state, v) => {
@@ -20,8 +22,8 @@ const mutations = {
     SET_SOCIALS: (state, v) => {
         state.socials = v;
     },
-    SET_SITE_INFO: (state, v) =>{
-      state.websiteInfo = v;
+    SET_SITE_INFO: (state, v) => {
+        state.websiteInfo = v;
     },
     GET_RUNTIME_INTERVAL: (state) => {
         if (!timer || !state.runTimeInterval) {
@@ -30,6 +32,14 @@ const mutations = {
                 state.runTimeInterval = getTimeInterval(runAt);
             }, 1000);
         }
+    },
+    setLoginTokenStorage: (state, value) => {
+        localStorage.setItem("jwtToken", value);
+        state.isLogin = true;
+    },
+    removeLoginTokenStorage: (state) => {
+        localStorage.removeItem("jwtToken");
+        state.isLogin = false;
     }
 }
 const actions = {
@@ -39,14 +49,14 @@ const actions = {
     initComputeTime: ({commit}) => {
         commit('GET_RUNTIME_INTERVAL');
     },
-    getSiteInfo: ({commit,state}) =>{
+    getSiteInfo: ({commit, state}) => {
         return new Promise(resolve => {
-            if (state.websiteInfo){
+            if (state.websiteInfo) {
                 resolve(state.websiteInfo)
-            }else {
+            } else {
                 fetchSiteInfo().then(res => {
                     let data = res.data || {}
-                    commit('SET_SITE_INFO',data);
+                    commit('SET_SITE_INFO', data);
                     resolve(data);
                 }).catch(err => {
                     resolve({});
@@ -54,16 +64,16 @@ const actions = {
             }
         })
     },
-    getSocials: ({commit,state}) =>{
+    getSocials: ({commit, state}) => {
         return new Promise((resolve => {
-            if (state.socials){
+            if (state.socials) {
                 resolve(state.socials)
             } else {
-                fetchSocial().then(res =>{
+                fetchSocial().then(res => {
                     let data = res.data || []
-                    commit('SET_SOCIALS',data);
+                    commit('SET_SOCIALS', data);
                     resolve(data);
-                }).catch(err =>{
+                }).catch(err => {
                     resolve([]);
                 })
             }
@@ -73,7 +83,7 @@ const actions = {
 const getters = {
     loading: state => state.loading,
     runTimeInterval: state => state.runTimeInterval,
-    notice: state => state.websiteInfo?state.websiteInfo.notice:''
+    notice: state => state.websiteInfo ? state.websiteInfo.notice : ''
 }
 export default new Vuex.Store({
     state,
