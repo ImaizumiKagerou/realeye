@@ -59,12 +59,12 @@ const routes = [
         component: () => import('../views/Articles.vue'),
         meta: {title: '推荐文章'}
     },
-    // {
-    //     path: '/article/:id',
-    //     name: 'article',
-    //     component: () => import('../views/Articles.vue'),
-    //     meta: {title: '文章'}
-    // }
+    {
+        path: '/article/:id',
+        name: 'article',
+        component: () => import('../views/Article.vue'),
+        meta: {title: '文章'}
+    }
 ]
 
 const router = new VueRouter({

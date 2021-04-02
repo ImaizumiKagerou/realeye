@@ -5,7 +5,7 @@
       <!--文章列表-->
       <main :class="{'search':hideSlogan}" class="site-main">
         <template v-for="item in postList">
-          <CommunityListItem :key="item.id" :post="item"></CommunityListItem>
+          <PrimeArticleListItem :key="item.id" :post="item"></PrimeArticleListItem>
         </template>
       </main>
 
@@ -23,9 +23,7 @@ import Feature from '@/components/feature'
 import Post from '@/components/post'
 import SmallIco from '@/components/small-ico'
 import Quote from '@/components/quote'
-import CommunityListItem from '@/components/CommunityListItem'
-import {SearchAPIMethod} from '@/api/SearchAPI';
-import {fetchList} from "@/api";
+import PrimeArticleListItem from '@/components/PrimeArticleListItem'
 import {ArticlesMethod} from '@/api/ArticlesAPI'
 
 export default {
@@ -47,7 +45,7 @@ export default {
     Post,
     SmallIco,
     Quote,
-    CommunityListItem
+    PrimeArticleListItem
   },
   computed: {
     searchWords() {
@@ -65,7 +63,7 @@ export default {
   },
   methods: {
     fetchList() {
-      ArticlesMethod(this.currPage,5).then((res) => {
+      ArticlesMethod(this.currPage, 5).then((res) => {
         this.postList = res.data.data.data || [];
         this.currPage = res.data.data.currPage;
         this.hasNextPage = res.data.data.hasNextPage;

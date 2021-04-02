@@ -39,3 +39,40 @@ export const ChangeActive = (id)=>{
         }
     )
 }
+
+export const AddPrimeArticle = (title,content,preview) => {
+    return axios.get(
+        store.state.base_url + "communityPrime/addPrime",
+        {
+            params: {
+                title,
+                preview,
+                content
+            }
+        }
+    )
+}
+
+export const GetPrimeArticleData = (pageNum, pageSize, activeStatus)=>{
+    return axios.get(
+        store.state.base_url + "communityPrime/getList",
+        {
+            params: {
+                pageNum,
+                pageSize,
+                activeStatus
+            }
+        }
+    )
+}
+
+export const ChangePrimeActive = (id)=>{
+    return axios.get(
+        store.state.base_url + "communityPrime/changeActiveStatus",
+        {
+            params: {
+                id
+            }
+        }
+    )
+}

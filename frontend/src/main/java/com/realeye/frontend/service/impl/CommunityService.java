@@ -8,3 +8,4 @@ public interface CommunityService extends IService<Community> {
 
 }
 
+

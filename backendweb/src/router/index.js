@@ -61,6 +61,16 @@ const routes = [
                     "../views/CommunityManage.vue")
             },
             {
+                path: "/PrimeArticleManage",
+                name: "PrimeArticleManage",
+                meta: {
+                    title: '推荐文章管理'
+                },
+                component: () => import (
+                    /* webpackChunkName: "CommunityManage" */
+                    "../views/PrimeArticleManage.vue")
+            },
+            {
                 path: "/charts",
                 name: "basecharts",
                 meta: {

@@ -34,6 +34,9 @@ public class Community {
     @TableField(value = "content")
     private String content;
 
+    @TableField(value = "preview")
+    private String preview;
+
     @TableField(value = "watch_count")
     private Integer watchCount;
 

@@ -83,6 +83,11 @@ export default {
           title: "社区管理"
         },
         {
+          icon: "el-icon-lx-text",
+          index: "PrimeArticleManage",
+          title: "推荐文章管理"
+        },
+        {
           icon: "el-icon-lx-copy",
           index: "tabs",
           title: "tab选项卡"

@@ -39,7 +39,8 @@ public class CommunityController {
 
         QueryWrapper<Community> wrapper = new QueryWrapper<>();
         wrapper.eq("parent_id", 0);
-        wrapper.eq("active",true);
+        wrapper.eq("active", true);
+        wrapper.eq("prime", false);
         wrapper.orderByAsc("create_time");
         Page<Community> page = new Page<>(pageNum, pageSize);
         Page<Community> list = communityService.page(page, wrapper);
@@ -99,7 +100,7 @@ public class CommunityController {
 
         QueryWrapper<Community> q = new QueryWrapper<>();
         q.eq("parent_id", id);
-        q.eq("active",true);
+        q.eq("active", true);
         List<Community> list = communityService.list(q);
         List<Comment> collect = list.stream().map(new Function<Community, Comment>() {
             @Override

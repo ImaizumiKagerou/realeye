@@ -10,3 +10,4 @@ import org.springframework.stereotype.Service;
 public class CommunityServiceImpl extends ServiceImpl<CommunityMapper, Community> implements CommunityService {
 }
 
+

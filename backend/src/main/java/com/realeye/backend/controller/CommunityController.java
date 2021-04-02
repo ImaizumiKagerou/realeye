@@ -24,6 +24,7 @@ public class CommunityController {
     public ResultBody getList(@NotNull Integer pageNum, @NotNull Integer pageSize, Integer activeStatus) {
 
         QueryWrapper<Community> wrapper = new QueryWrapper<>();
+        wrapper.eq("prime", false);
         wrapper.orderByAsc("create_time");
 
         if (activeStatus != null) {

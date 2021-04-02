@@ -6,6 +6,11 @@ import installElementPlus from './plugins/element'
 import './assets/css/icon.css'
 const app = createApp(App)
 installElementPlus(app)
+
+// global
+import { quillEditor } from 'vue3-quill'
+app.use(quillEditor)
+
 app
     .use(store)
     .use(router)
