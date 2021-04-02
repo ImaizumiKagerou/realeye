@@ -39,6 +39,7 @@ public class CommunityController {
 
         QueryWrapper<Community> wrapper = new QueryWrapper<>();
         wrapper.eq("parent_id", 0);
+        wrapper.eq("active",true);
         wrapper.orderByAsc("create_time");
         Page<Community> page = new Page<>(pageNum, pageSize);
         Page<Community> list = communityService.page(page, wrapper);
@@ -98,17 +99,17 @@ public class CommunityController {
 
         QueryWrapper<Community> q = new QueryWrapper<>();
         q.eq("parent_id", id);
+        q.eq("active",true);
         List<Community> list = communityService.list(q);
         List<Comment> collect = list.stream().map(new Function<Community, Comment>() {
             @Override
             public Comment apply(Community community) {
-                Comment build = Comment.builder()
+                return Comment.builder()
                         .id(community.getId())
                         .fromUserName(community.getUsername())
                         .content(community.getContent())
                         .createTime(community.getCreateTime().getTime())
                         .build();
-                return build;
             }
         }).collect(Collectors.toList());
 

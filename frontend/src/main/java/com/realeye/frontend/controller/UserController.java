@@ -71,6 +71,7 @@ public class UserController {
         QueryWrapper<User> wrapper = new QueryWrapper<>();
         wrapper.eq("username", username);
         wrapper.eq("password", password);
+        wrapper.eq("active_status", true);
         User one = userService.getOne(wrapper);
         if (one == null) {
             return ResultBody.newErrorInstance(403, "用户名或密码错误");

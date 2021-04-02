@@ -29,6 +29,7 @@ public class PrimeController {
         QueryWrapper<Community> wrapper = new QueryWrapper<>();
         wrapper.eq("parent_id", 0);
         wrapper.eq("prime", 1);
+        wrapper.eq("active",true);
         wrapper.orderByAsc("create_time");
         Page<Community> page = new Page<>(pageNum, pageSize);
         Page<Community> list = communityService.page(page, wrapper);
