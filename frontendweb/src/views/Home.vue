@@ -8,7 +8,7 @@
                     <span v-if="searchWords">搜索结果："{{searchWords}}" 相关文章</span>
                     <span v-else-if="category">分类 "{{category}}" 相关文章</span>
                 </div>
-                <quote v-else>{{notice}}</quote>
+<!--                <quote v-else>{{notice}}</quote>-->
             </div>
 
 <!--            &lt;!&ndash;焦点图&ndash;&gt;-->
@@ -22,18 +22,18 @@
 <!--                    </div>-->
 <!--                </div>-->
 <!--            </div>-->
-            <!--文章列表-->
-            <main class="site-main" style="padding-top: 0" :class="{'search':hideSlogan}">
-                <section-title v-if="!hideSlogan">推荐</section-title>
-                <template v-for="item in postList">
-                    <post :post="item" :key="item.id"></post>
-                </template>
-            </main>
+<!--            &lt;!&ndash;文章列表&ndash;&gt;-->
+<!--            <main class="site-main" style="padding-top: 0" :class="{'search':hideSlogan}">-->
+<!--                <section-title v-if="!hideSlogan">推荐</section-title>-->
+<!--                <template v-for="item in postList">-->
+<!--                    <post :post="item" :key="item.id"></post>-->
+<!--                </template>-->
+<!--            </main>-->
 
-            <!--加载更多-->
-            <div class="more" v-show="hasNextPage">
-                <div class="more-btn" @click="loadMore">More</div>
-            </div>
+<!--            &lt;!&ndash;加载更多&ndash;&gt;-->
+<!--            <div class="more" v-show="hasNextPage">-->
+<!--                <div class="more-btn" @click="loadMore">More</div>-->
+<!--            </div>-->
         </div>
     </div>
 </template>

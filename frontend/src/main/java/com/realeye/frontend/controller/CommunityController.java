@@ -117,12 +117,13 @@ public class CommunityController {
 
     @JwtTokenInit
     @GetMapping("/addComment")
-    public ResultBody addCommunityComment(@NotBlank String title, @NotBlank String content, @NotNull Integer communityId, @ApiIgnore JWTToken jwtToken) {
+    public ResultBody addCommunityComment(@NotBlank String content, @NotNull Integer communityId, @ApiIgnore JWTToken jwtToken) {
         Community build = Community.builder()
-                .title(title)
+                .title("")
                 .content(content)
                 .active(true)
                 .userId(jwtToken.getId())
+                .username(jwtToken.getUsername())
                 .parentId(communityId)
                 .prime(false)
                 .build();

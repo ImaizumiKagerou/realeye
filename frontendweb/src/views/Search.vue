@@ -34,7 +34,6 @@ import SmallIco from '@/components/small-ico'
 import Quote from '@/components/quote'
 import SearchResultListItem from '@/components/SearchResultListItem'
 import {SearchAPIMethod} from '@/api/SearchAPI';
-import {fetchList} from "@/api";
 
 export default {
   name: 'Search',
@@ -78,10 +77,10 @@ export default {
       })
     },
     loadMore() {
-      fetchList({page:this.currPage+1}).then(res => {
-        this.postList = this.postList.concat(res.data.items || [])
-        this.currPage = res.data.page
-        this.hasNextPage = res.data.hasNextPage
+      SearchAPIMethod(this.currPage + 1, 5, this.$route.params.words).then(res => {
+        this.postList = this.postList.concat(res.data.data.data || [])
+        this.currPage = res.data.data.currPage;
+        this.hasNextPage = res.data.data.hasNextPage;
       })
     }
   },

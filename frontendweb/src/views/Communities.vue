@@ -109,22 +109,13 @@ export default {
     },
     fetchList() {
       CommunityListMethod(this.currPage,5).then((res) => {
-        console.log(res);
         this.postList = res.data.data.data || [];
         this.currPage = res.data.data.currPage;
         this.hasNextPage = res.data.data.hasNextPage;
       })
-      // fetchList().then(res => {
-      //   this.postList = res.data.items || []
-      //   this.currPage = res.data.page
-      //   this.hasNextPage = res.data.hasNextPage
-      // }).catch(err => {
-      //   console.log(err)
-      // })
     },
     loadMore() {
-      SearchAPIMethod(this.currPage + 1, 5, this.$route.params.words).then((res) => {
-        console.log(res);
+      CommunityListMethod(this.currPage + 1, 5, this.$route.params.words).then((res) => {
         this.postList = this.postList.concat(res.data.data.data || []);
         this.currPage = res.data.data.currPage;
         this.hasNextPage = res.data.data.hasNextPage;

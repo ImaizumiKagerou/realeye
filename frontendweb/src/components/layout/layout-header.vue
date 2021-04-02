@@ -17,12 +17,7 @@
         <router-link to="/">首页</router-link>
       </div>
       <div class="menu-item hasChild">
-        <a href="#">推荐文章</a>
-        <div v-if="category.length" class="childMenu">
-          <div v-for="item in category" :key="item.title" class="sub-menu">
-            <router-link :to="`/category/${item.title}`">{{ item.title }}</router-link>
-          </div>
-        </div>
+        <router-link to="/articles">推荐文章</router-link>
       </div>
       <div class="menu-item">
         <router-link to="/communities">社区</router-link>

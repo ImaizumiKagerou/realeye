@@ -61,3 +61,15 @@ export const CommunityArticleCommentByIdMethod = (id) => {
         }
     )
 }
+
+export const CommunityArticleReplySubmit = (communityId,content) => {
+    return axios.get(
+        store.state.base_url + "community/addComment",
+        {
+            params: {
+                communityId,
+                content
+            }
+        }
+    )
+}
