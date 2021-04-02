@@ -14,39 +14,38 @@ import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 
 @RestController
-@RequestMapping("/communityPrime")
-public class CommunityPrimeController {
+@RequestMapping("/community")
+public class CommunityController {
 
     @Resource
     private CommunityService communityService;
 
     @GetMapping("/getList")
-    public ResultBody getList(@NotNull Integer pageNum, @NotNull Integer pageSize) {
+    public ResultBody getList(@NotNull Integer pageNum, @NotNull Integer pageSize, Integer activeStatus) {
+
         QueryWrapper<Community> wrapper = new QueryWrapper<>();
-        wrapper.eq("parent_id", 0);
-        wrapper.eq("prime", 1);
         wrapper.orderByAsc("create_time");
+
+        if (activeStatus != null) {
+            wrapper.eq("active", activeStatus);
+        }
+
         Page<Community> page = new Page<>(pageNum, pageSize);
         Page<Community> list = communityService.page(page, wrapper);
+
         return ResultBody.newSuccessInstance(list);
     }
 
-    @GetMapping("/delete")
-    public ResultBody delete(@NotNull Integer id) {
-        UpdateWrapper<Community> wrapper = new UpdateWrapper<>();
-        wrapper.setSql("active=false");
-        wrapper.eq("id", id);
-        communityService.update(wrapper);
+    @GetMapping("/changeActive")
+    public ResultBody changeActive(@NotNull Integer id) {
+
+        UpdateWrapper<Community> w = new UpdateWrapper<>();
+        w.eq("id", id);
+        w.setSql("active = !active");
+        communityService.update(w);
+
         return ResultBody.newSuccessInstance();
     }
 
-    @GetMapping("/prime")
-    public ResultBody prime(@NotNull Integer id) {
-        UpdateWrapper<Community> wrapper = new UpdateWrapper<>();
-        wrapper.setSql("prime=true");
-        wrapper.eq("id", id);
-        communityService.update(wrapper);
-        return ResultBody.newSuccessInstance();
-    }
 
 }

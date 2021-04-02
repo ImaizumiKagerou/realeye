@@ -63,6 +63,7 @@
         </el-table-column>
 
         <el-table-column :formatter="formatDate" label="注册时间" prop="createTime"></el-table-column>
+        <el-table-column :formatter="formatDate" label="上一次登录时间" prop="lastLoginTime"></el-table-column>
         <el-table-column align="center" label="操作" width="180">
           <template #default="scope">
             <el-button @click="changeActiveStatus(scope.row.id)"

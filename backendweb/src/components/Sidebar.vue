@@ -78,6 +78,11 @@ export default {
           title: "APIKey管理"
         },
         {
+          icon: "el-icon-lx-group",
+          index: "CommunityManage",
+          title: "社区管理"
+        },
+        {
           icon: "el-icon-lx-copy",
           index: "tabs",
           title: "tab选项卡"

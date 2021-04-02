@@ -37,7 +37,7 @@ const routes = [
                     title: '用户管理'
                 },
                 component: () => import (
-                    /* webpackChunkName: "table" */
+                    /* webpackChunkName: "UserManage" */
                     "../views/UserManage.vue")
             },
             {
@@ -47,8 +47,18 @@ const routes = [
                     title: 'APIKey管理'
                 },
                 component: () => import (
-                    /* webpackChunkName: "table" */
+                    /* webpackChunkName: "APIKeyManage" */
                     "../views/APIKeyManage.vue")
+            },
+            {
+                path: "/CommunityManage",
+                name: "CommunityManage",
+                meta: {
+                    title: '社区管理'
+                },
+                component: () => import (
+                    /* webpackChunkName: "CommunityManage" */
+                    "../views/CommunityManage.vue")
             },
             {
                 path: "/charts",

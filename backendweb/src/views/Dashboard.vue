@@ -244,6 +244,11 @@ export default {
                     1}/${date.getDate()}`;
             });
         }
+    },
+    created() {
+      if (!localStorage.getItem("jwtToken")){
+        this.$router.push("/login");
+      }
     }
 };
 </script>
