@@ -34,9 +34,6 @@
           <!--评论-->
           <div class="comments">
             <comment v-for="item in comments" :key="item.id" :comment="item">
-<!--              <template v-if="item.reply.length">-->
-<!--                <comment v-for="reply in item.reply" :key="reply.id" :comment="reply"></comment>-->
-<!--              </template>-->
             </comment>
           </div>
         </article>
@@ -50,7 +47,7 @@ import Banner from '@/components/banner'
 import sectionTitle from '@/components/section-title'
 import comment from '@/components/comment'
 import menuTree from '@/components/menu-tree'
-import {fetchComment, formatDate} from '@/api'
+import {formatDate} from '@/api'
 import {CommunityArticleCommentByIdMethod, CommunityArticleInfoByIdMethod} from '@/api/CommunityAPI';
 
 export default {
@@ -88,24 +85,17 @@ export default {
     },
     getComment() {
       CommunityArticleCommentByIdMethod(this.$route.params.id).then((res) => {
-        if (res.data.data.length===0) {
+        if (res.data.data.length === 0) {
           console.log("aaa");
           this.comments = [{
-              id: 1,
-              content: "暂无评论",
-              createTime: undefined
+            id: 1,
+            content: "暂无评论",
+            createTime: undefined
           }]
         } else {
           this.comments = res.data.data || []
         }
       })
-
-      // fetchComment().then(res => {
-      //   this.comments = res.data || []
-      //   console.log(this.comments);
-      // }).catch(err => {
-      //   console.log(err)
-      // })
     },
     fetchH(arr, left, right) {
       if (right) {

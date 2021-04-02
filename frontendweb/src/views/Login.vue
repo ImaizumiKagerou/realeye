@@ -1,7 +1,6 @@
 <template>
   <div id="main" class="main-bg">
     <div style="height: 80px;background-color: white"></div>
-    <!--    <h1 style="color: black">会员登录</h1>-->
     <div class="sub-main-w3">
       <div class="image-style">
       </div>
@@ -23,7 +22,6 @@
                 <input v-model="logindata.password" name="password" placeholder="密码" required type="password" @keyup.enter="login"/>
               </div>
               <button class="btn submit" type="button" @click="login">登 录</button>
-              <!--              <a class="bottom-text-w3ls" for="option3" href="#">忘记密码?</a>-->
             </form>
           </article>
         </div>
@@ -58,7 +56,6 @@
             <form action="#" method="post">
               <h3 class="legend last">重置密码</h3>
               <p class="para-style">请在下面输入您的电子邮件地址，我们将给您发送一封带有说明的电子邮件。</p>
-              <!--              <p class="para-style-2"><strong>需要帮助?</strong>了解更多关于如何 <a href="#">#</a></p>-->
               <div class="input">
                 <span aria-hidden="true" class="fa fa-envelope-o"></span>
                 <input v-model="forgetdata.email" name="email" placeholder="邮箱" required type="email"/>

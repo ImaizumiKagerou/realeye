@@ -36,12 +36,6 @@ const routes = [
         meta: {title: '关于'}
     },
     {
-        path: '/friend',
-        name: 'friend',
-        component: () => import('../views/Friend.vue'),
-        meta: {title: '友链'}
-    },
-    {
         path: '/communities',
         name: 'communities',
         component: () => import('../views/Communities.vue'),

@@ -4,7 +4,6 @@
         <layout-header></layout-header>
         <layout-body></layout-body>
         <layout-footer></layout-footer>
-<!--      <Login></Login>-->
     </div>
 </template>
 <script>
@@ -13,16 +12,13 @@
     import layoutFooter from '@/components/layout/layout-footer'
     import Loading from '@/components/loading'
 
-    import Login from "@/views/Login";
-
     export default {
         name: "app",
         components: {
             layoutHeader,
             layoutBody,
             layoutFooter,
-            Loading,
-            Login
+            Loading
         }
     }
 </script>

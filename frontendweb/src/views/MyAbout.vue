@@ -62,7 +62,6 @@ export default {
     }
   },
   components: {
-    // Quote,
     sectionTitle
   },
   methods: {

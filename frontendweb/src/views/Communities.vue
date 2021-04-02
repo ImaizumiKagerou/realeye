@@ -1,8 +1,6 @@
 <template>
   <div class="home">
     <div class="site-content animate">
-
-
       <!--文章列表-->
       <main :class="{'search':hideSlogan}" class="site-main">
         <span style="top: 100px;">
@@ -46,8 +44,6 @@ import Post from '@/components/post'
 import SmallIco from '@/components/small-ico'
 import Quote from '@/components/quote'
 import CommunityListItem from '@/components/CommunityListItem'
-import {SearchAPIMethod} from '@/api/SearchAPI';
-import {fetchList} from "@/api";
 import {AddCommunity, CommunityListMethod} from '@/api/CommunityAPI'
 
 export default {
@@ -108,7 +104,7 @@ export default {
       this.dialogVisible = true;
     },
     fetchList() {
-      CommunityListMethod(this.currPage,5).then((res) => {
+      CommunityListMethod(this.currPage, 5).then((res) => {
         this.postList = res.data.data.data || [];
         this.currPage = res.data.data.currPage;
         this.hasNextPage = res.data.data.hasNextPage;
