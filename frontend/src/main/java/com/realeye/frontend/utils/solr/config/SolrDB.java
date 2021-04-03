@@ -6,13 +6,13 @@ import com.realeye.frontend.entity.UrlTable;
 import com.realeye.frontend.service.DomainTableService;
 import com.realeye.frontend.service.IpTableService;
 import com.realeye.frontend.service.UrlTableService;
+import com.realeye.frontend.service.SurveillanceService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
@@ -31,9 +31,12 @@ public class SolrDB {
     private UrlTableService urlTableService;
 
     @Resource
+    private SurveillanceService surveillanceService;
+
+    @Resource
     private SolrClient solrClient;
 
-//    @PostConstruct
+    //    @PostConstruct
     public void createDB() throws IOException, SolrServerException {
         log.info("开始重建数据库");
         solrClient.deleteByQuery("*:*");
@@ -53,5 +56,7 @@ public class SolrDB {
         solrClient.addBeans(list2);
         solrClient.commit();
         log.info("重建完成");
+
     }
+
 }

@@ -1,7 +1,10 @@
 package com.realeye.frontend.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.realeye.frontend.entity.APIKey;
 import com.realeye.frontend.entity.MyPageVO;
 import com.realeye.frontend.entity.SolrResultVO;
+import com.realeye.frontend.service.APIKeyService;
 import com.realeye.frontend.utils.ResultBody;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +33,9 @@ public class SearchController {
 
     @Resource
     private SolrClient solrClient;
+
+    @Resource
+    private APIKeyService apiKeyService;
 
     @GetMapping("/main")
     public ResultBody normalSearch(@NotNull String keyword, @NotNull Integer pageNum, @NotNull Integer pageSize) throws IOException, SolrServerException {
@@ -98,5 +104,18 @@ public class SearchController {
                 .build();
 
         return ResultBody.newSuccessInstance(myPageVO);
+    }
+
+    @GetMapping("/api")
+    public ResultBody APISearch(@NotNull String apikey,@NotNull String keyword, @NotNull Integer pageNum, @NotNull Integer pageSize) throws IOException, SolrServerException {
+
+        QueryWrapper<APIKey> q = new QueryWrapper<>();
+        q.eq("apikey",apikey);
+        APIKey one = apiKeyService.getOne(q);
+        if (one == null) {
+            return ResultBody.newErrorInstance(403,"apikey有误");
+        }
+
+        return ResultBody.newSuccessInstance(normalSearch(keyword,pageNum,pageSize));
     }
 }

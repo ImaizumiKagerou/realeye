@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.realeye.frontend.entity.APIKey;
 import com.realeye.frontend.entity.User;
 import com.realeye.frontend.service.UserService;
-import com.realeye.frontend.service.impl.APIKeyService;
+import com.realeye.frontend.service.APIKeyService;
 import com.realeye.frontend.utils.ResultBody;
 import com.realeye.frontend.utils.jwt.JWTToken;
 import com.realeye.frontend.utils.jwt.JwtAuthenticatioToken;

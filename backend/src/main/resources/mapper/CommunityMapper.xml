@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.realeye.backend.mapper.CommunityMapper">
+  <resultMap id="BaseResultMap" type="com.realeye.backend.entity.Community">
+    <!--@mbg.generated-->
+    <!--@Table community-->
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+    <result column="preview" jdbcType="VARCHAR" property="preview" />
+    <result column="watch_count" jdbcType="INTEGER" property="watchCount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="active" jdbcType="BOOLEAN" property="active" />
+    <result column="prime" jdbcType="BOOLEAN" property="prime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, parent_id, user_id, username, title, content, preview, watch_count, create_time, 
+    active, prime
+  </sql>
+</mapper>

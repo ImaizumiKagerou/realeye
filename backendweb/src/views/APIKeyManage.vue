@@ -47,7 +47,7 @@
         <el-table-column align="center" label="操作" width="280">
           <template #default="scope">
             <el-button type="primary" @click="handleReset(scope.row.id)">
-              重置Key
+              {{ scope.row.apikey==='申请中...'?'通过':'重置Key' }}
             </el-button>
             <el-button type="primary" @click="handleEdit(scope.row.id)">
               修改过期时间
