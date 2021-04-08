@@ -159,7 +159,7 @@ article.hentry {
 
     .breadcrumbs {
       font-size: 14px;
-      color: #D2D2D2;
+      color: black;
       text-decoration: none;
       margin-bottom: 30px;
     }

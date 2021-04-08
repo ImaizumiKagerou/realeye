@@ -92,7 +92,7 @@ export default {
   }
 
   .user-name {
-    color: #8fd0cc;
+    color: black;
   }
 }
 
@@ -103,7 +103,7 @@ export default {
     /*padding-bottom: 30px;*/
     margin-bottom: 30px;
     font-size: 14px;
-    color: #9c9c9c;
+    color: black;
     line-height: 1.3rem;
   }
 }

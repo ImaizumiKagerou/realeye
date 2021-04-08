@@ -137,7 +137,7 @@ export default {
         activeStatus: undefined,
         name: undefined,
         pageIndex: 1,
-        pageSize: 2
+        pageSize: 10
       },
       tableData: [],
       multipleSelection: [],

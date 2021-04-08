@@ -26,7 +26,7 @@
         <router-link to="/about">我的</router-link>
       </div>
       <div class="menu-item" v-if="$store.state.isLogin">
-        <router-link to="/login" @click="logout">登出</router-link>
+        <a class="atest" @click="logout">登出</a>
       </div>
       <div class="menu-item" v-if="!$store.state.isLogin">
         <router-link to="/login">注册/登陆</router-link>
@@ -82,13 +82,20 @@ export default {
     },
     logout(){
       this.$store.commit("removeLoginTokenStorage");
-      this.$router.push("/");
+      if (!this.$route.fullPath==="/"){
+        this.$router.push("/");
+      }
     }
   }
 }
 </script>
 
 <style lang="less" scoped>
+
+.atest{
+  cursor: pointer;
+}
+
 #layout-header {
   position: fixed;
   top: 0;
