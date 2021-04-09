@@ -28,13 +28,14 @@ export const AddCommunity = (title, content) => {
     )
 }
 
-export const CommunityListMethod = (pageNum, pageSize) => {
+export const CommunityListMethod = (pageNum, pageSize, val) => {
     return axios.get(
         store.state.base_url + "community/list",
         {
             params: {
                 pageNum,
-                pageSize
+                pageSize,
+                val
             }
         }
     )

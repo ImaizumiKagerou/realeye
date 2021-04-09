@@ -35,13 +35,19 @@ public class CommunityController {
     private CommunityService communityService;
 
     @GetMapping("/list")
-    public ResultBody getList(@NotNull Integer pageNum, @NotNull Integer pageSize) {
+    public ResultBody getList(@NotNull Integer pageNum, @NotNull Integer pageSize, String val) {
 
         QueryWrapper<Community> wrapper = new QueryWrapper<>();
         wrapper.eq("parent_id", 0);
         wrapper.eq("active", true);
         wrapper.eq("prime", false);
-        wrapper.orderByAsc("create_time");
+
+        if (val == null) {
+            wrapper.orderByDesc("create_time");
+        } else {
+            wrapper.orderByDesc("like_count");
+        }
+
         Page<Community> page = new Page<>(pageNum, pageSize);
         Page<Community> list = communityService.page(page, wrapper);
 
@@ -122,7 +128,7 @@ public class CommunityController {
     public ResultBody addCommunityComment(@NotBlank String content, @NotNull Integer communityId, @ApiIgnore JWTToken jwtToken) {
 
         UpdateWrapper<Community> u = new UpdateWrapper<>();
-        u.eq("id",communityId);
+        u.eq("id", communityId);
         u.setSql("comment_count = comment_count + 1");
         communityService.update(u);
 
@@ -140,10 +146,10 @@ public class CommunityController {
     }
 
     @GetMapping("/like")
-    public ResultBody LikeCommunity(@NotNull Integer id){
+    public ResultBody LikeCommunity(@NotNull Integer id) {
         UpdateWrapper<Community> u = new UpdateWrapper<>();
 
-        u.eq("id",id);
+        u.eq("id", id);
         u.setSql("watch_count = watch_count - 1");
         u.setSql("like_count = like_count + 1");
         communityService.update(u);

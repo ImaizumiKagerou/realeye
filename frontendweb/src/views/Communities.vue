@@ -5,7 +5,17 @@
       <main :class="{'search':hideSlogan}" class="site-main">
         <span style="top: 100px;">
           <el-button v-if="$store.state.isLogin" @click="showCommunitiesDialog()">发帖</el-button>
+          <el-select v-model="value" clearable placeholder="请选择" @change="changeSort">
+            <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </span>
+
         <template v-for="item in postList">
           <CommunityListItem :key="item.id" :post="item"></CommunityListItem>
         </template>
@@ -51,6 +61,14 @@ export default {
   props: ['cate', 'words'],
   data() {
     return {
+      value: "按时间",
+      options: [{
+        value: 'time',
+        label: '按时间'
+      }, {
+        value: 'like',
+        label: '按点赞'
+      }],
       postList: [],
       currPage: 1,
       hasNextPage: false,
@@ -84,6 +102,22 @@ export default {
     }
   },
   methods: {
+    changeSort(val) {
+      console.log(val);
+      if (val === 'like') {
+        CommunityListMethod(this.currPage, 5, val).then((res) => {
+          this.postList = res.data.data.data || [];
+          this.currPage = 1;
+          this.hasNextPage = res.data.data.hasNextPage;
+        })
+      } else {
+        CommunityListMethod(this.currPage, 5).then((res) => {
+          this.postList = res.data.data.data || [];
+          this.currPage = 1;
+          this.hasNextPage = res.data.data.hasNextPage;
+        })
+      }
+    },
     saveFatie() {
       const _self = this;
       AddCommunity(this.dialog.title, this.dialog.content).then((res) => {
