@@ -64,7 +64,7 @@ export default {
                   this.$message.success("登录成功");
                   localStorage.setItem("ms_username", this.param.username);
                   localStorage.setItem("jwtToken", res.data.data);
-                  this.$router.push("/");
+                  this.$router.push("/userManage");
                 } else {
                   this.$message.error("用户名或密码错误");
                 }

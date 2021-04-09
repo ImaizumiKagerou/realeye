@@ -120,6 +120,12 @@ public class CommunityController {
     @JwtTokenInit
     @GetMapping("/addComment")
     public ResultBody addCommunityComment(@NotBlank String content, @NotNull Integer communityId, @ApiIgnore JWTToken jwtToken) {
+
+        UpdateWrapper<Community> u = new UpdateWrapper<>();
+        u.eq("id",communityId);
+        u.setSql("comment_count = comment_count + 1");
+        communityService.update(u);
+
         Community build = Community.builder()
                 .title("")
                 .content(content)
@@ -130,6 +136,18 @@ public class CommunityController {
                 .prime(false)
                 .build();
         communityService.save(build);
+        return ResultBody.newSuccessInstance();
+    }
+
+    @GetMapping("/like")
+    public ResultBody LikeCommunity(@NotNull Integer id){
+        UpdateWrapper<Community> u = new UpdateWrapper<>();
+
+        u.eq("id",id);
+        u.setSql("watch_count = watch_count - 1");
+        u.setSql("like_count = like_count + 1");
+        communityService.update(u);
+
         return ResultBody.newSuccessInstance();
     }
 

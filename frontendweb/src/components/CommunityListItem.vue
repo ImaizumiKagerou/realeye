@@ -1,20 +1,35 @@
 <template>
   <article class="post post-list">
     <div class="post-entry">
-      <div class="feature">
-        <p>{{post.username}}</p>
-      </div>
+      <!--      <div class="feature">-->
+      <!--        <p>{{post.username}}</p>-->
+      <!--      </div>-->
       <h1 class="entry-title">
         <router-link :to="'/Community/'+post.id">
           <p>{{ post.title }}</p>
         </router-link>
       </h1>
       <div class="p-time">
-        <i class="iconfont iconmeditor-time"></i> {{ post.createTimeL | parseTime }}<i v-if="post.isHot"
-                                                                                      class="iconfont iconfire"
-                                                                                      style="margin-left: 5px;color: #ff6d6d;"></i>
+        <div>
+          <i class="el-icon-time"></i>
+          <span> {{ post.createTimeL | parseTime }}</span>
+        </div>
+        <br/>
+        <br/>
+        <div>
+          <i class="el-icon-check"></i>
+          <span> {{ post.likeCount }}</span>
+        </div>
+        <div>
+          <i class="el-icon-view"></i>
+          <span> {{ post.watchCount }}</span>
+        </div>
+        <div>
+          <i class="el-icon-s-comment"></i>
+          <span> {{ post.commentCount }}</span>
+        </div>
       </div>
-      <p class="summary">{{post.content}}</p>
+      <p class="summary">{{ post.content }}</p>
     </div>
     <hr/>
   </article>
@@ -39,33 +54,34 @@ export default {
 }
 
 .post-entry {
-  .feature {
-    position: absolute;
-    margin-top: 10px;
 
-    img {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      border-radius: 50%;
-      padding: 2px;
-      border: 1px solid #DADADA;
-      position: relative;
-      transition: all 0.2s linear;
-      overflow: hidden;
-
-      &:hover {
-        transform: scale(1.1, 1.1);
-        filter: contrast(130%);
-      }
-    }
-  }
+  //.feature {
+  //  position: absolute;
+  //  margin-top: 10px;
+  //
+  //  img {
+  //    width: 100px;
+  //    height: 100px;
+  //    object-fit: cover;
+  //    border-radius: 50%;
+  //    padding: 2px;
+  //    border: 1px solid #DADADA;
+  //    position: relative;
+  //    transition: all 0.2s linear;
+  //    overflow: hidden;
+  //
+  //    &:hover {
+  //      transform: scale(1.1, 1.1);
+  //      filter: contrast(130%);
+  //    }
+  //  }
+  //}
 
   .entry-title {
     font-size: 21px;
     font-weight: 600;
     line-height: 50px;
-    margin: 0 0 0 17%;
+    margin: 0 0 0 0%;
     position: relative;
     z-index: 1;
     white-space: nowrap;
@@ -73,6 +89,7 @@ export default {
     text-overflow: ellipsis;
     width: 70%;
     color: #737373;
+    font-family: "微软雅黑", "Microsoft Yahei", Arial, "Hiragino Sans GB", STHeiti, "华文细黑", sans-serif;
 
     & a:hover {
       color: #8fd0cc;
@@ -82,18 +99,18 @@ export default {
   .p-time {
     position: absolute;
     right: 0;
-    top: 16px;
+    top: 13px;
     font-size: 12px;
     color: #989898;
     letter-spacing: 1px;
     font-family: din, 'Hiragino Sans GB', 'Microsoft Yahei', Arial, sans-serif;
-    display: flex;
+    //display: flex;
     align-items: center;
   }
 
   p.summary {
     min-height: 60px;
-    margin: 0 0 0 17%;
+    margin: 0 0 0 0%;
     font-size: 15px;
     color: #6f6f6f;
     letter-spacing: 1px;
@@ -158,11 +175,11 @@ export default {
 }
 
 .post hr {
-  width: 30%;
+  width: 100%;
   height: 1px;
   margin: 0 auto;
   border: 0;
-  background: #EFEFEF;
+  background: black;
 }
 
 /*******/

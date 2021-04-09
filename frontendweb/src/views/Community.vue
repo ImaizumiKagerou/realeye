@@ -23,6 +23,10 @@
           <!-- 文章底部 -->
           <section-title>
             <footer class="post-footer">
+              <div class="post-like2" @click="addLike">
+                <i class="el-icon-check"></i>
+                <span>{{ articleData.likeCount }}</span>
+              </div>
               <!-- 阅读次数 -->
               <div class="post-like">
                 <i class="iconfont iconeyes"></i>
@@ -48,7 +52,7 @@ import sectionTitle from '@/components/section-title'
 import comment from '@/components/comment'
 import menuTree from '@/components/menu-tree'
 import {formatDate} from '@/api'
-import {CommunityArticleCommentByIdMethod, CommunityArticleInfoByIdMethod} from '@/api/CommunityAPI';
+import {AddLike, CommunityArticleCommentByIdMethod, CommunityArticleInfoByIdMethod} from '@/api/CommunityAPI';
 
 export default {
   name: 'Community',
@@ -59,7 +63,8 @@ export default {
         title: undefined,
         createTime: undefined,
         content: undefined,
-        watchCount: undefined
+        watchCount: undefined,
+        likeCount: undefined,
       },
       showDonate: false,
       comments: []
@@ -72,6 +77,12 @@ export default {
     menuTree
   },
   methods: {
+    addLike() {
+      AddLike(this.$route.params.id).then((res) => {
+        this.$message.success("点赞成功");
+        this.getArticleData();
+      })
+    },
     getArticleData() {
       CommunityArticleInfoByIdMethod(this.$route.params.id).then((res) => {
         if (res.data.code === 200) {
@@ -79,6 +90,7 @@ export default {
           this.articleData.title = res.data.data.title;
           this.articleData.content = res.data.data.content;
           this.articleData.watchCount = res.data.data.watchCount;
+          this.articleData.likeCount = res.data.data.likeCount;
           this.articleData.createTime = formatDate(res.data.data.createTime);
         }
       })
@@ -181,6 +193,16 @@ article.hentry {
     }
 
     .post-like {
+      float: right;
+      margin: 7px 0 0 20px;
+    }
+
+    .post-like2 {
+
+      &:hover{
+        cursor: pointer;
+      }
+
       float: right;
       margin: 7px 0 0 20px;
     }

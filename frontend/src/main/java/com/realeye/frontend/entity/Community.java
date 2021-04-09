@@ -40,6 +40,12 @@ public class Community {
     @TableField(value = "watch_count")
     private Integer watchCount;
 
+    @TableField(value = "comment_count")
+    private Integer commentCount;
+
+    @TableField(value = "like_count")
+    private Integer likeCount;
+
     @TableField(value = "create_time")
     private Date createTime;
 
