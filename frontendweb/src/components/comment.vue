@@ -66,8 +66,11 @@ export default {
       const ref = `comment${id}`
     },
     submitReply(v) {
+      if (!this.$store.state.isLogin){
+        this.$message.error("必须登录才能发表回复!");
+        return;
+      }
       CommunityArticleReplySubmit(this.$route.params.id, v).then((res) => {
-        console.log(v)
         this.$parent.getComment();
         this.close();
       })

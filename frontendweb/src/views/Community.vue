@@ -1,6 +1,6 @@
 <template>
   <div class="articles">
-    <banner></banner>
+<!--    <banner></banner>-->
     <div class="site-content animate">
       <main class="site-main">
         <article class="hentry">
@@ -78,6 +78,10 @@ export default {
   },
   methods: {
     addLike() {
+      if (!this.$store.state.isLogin){
+        this.$message.error("必须登录才能发表点赞!");
+        return;
+      }
       AddLike(this.$route.params.id).then((res) => {
         this.$message.success("点赞成功");
         this.getArticleData();
