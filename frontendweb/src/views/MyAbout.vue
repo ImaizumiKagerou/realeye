@@ -116,7 +116,6 @@ export default {
   },
   methods: {
     getPostList(val) {
-      console.log('abc');
       this.type = val;
       MyAboutList(this.currPage, 5, this.type).then((res) => {
         this.postList = res.data.data.data || [];
@@ -125,7 +124,6 @@ export default {
       })
     },
     loadMore() {
-      console.log('ccc');
       MyAboutList(this.currPage + 1, 5, this.type).then((res) => {
         this.postList = this.postList.concat(res.data.data.data || []);
         this.currPage = res.data.data.currPage;
@@ -141,7 +139,7 @@ export default {
           })
           .then(() => {
             this.userInfo.apikey = "申请中...";
-            this.$message.success("删除成功");
+            this.$message.success("申请成功");
           })
     },
     bindEmail() {

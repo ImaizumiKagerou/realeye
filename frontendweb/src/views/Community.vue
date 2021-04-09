@@ -112,13 +112,6 @@ export default {
           this.comments = res.data.data || []
         }
       })
-    },
-    fetchH(arr, left, right) {
-      if (right) {
-        return arr.filter(item => item.offsetTop > left && item.offsetTop < right)
-      } else {
-        return arr.filter(item => item.offsetTop > left)
-      }
     }
   },
   mounted() {

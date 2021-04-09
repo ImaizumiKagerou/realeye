@@ -149,7 +149,7 @@ export default {
       this.dialog.type = false;
     },
     saveAdd() {
-      AddPrimeArticle(this.dialog.title, this.dialog.preview, this.dialog.content).then((res) => {
+      AddPrimeArticle(this.dialog.title, this.dialog.content, this.dialog.preview).then((res) => {
         if (res.data.code === 200) {
           this.$message.success("添加成功");
           this.cancelDialog();

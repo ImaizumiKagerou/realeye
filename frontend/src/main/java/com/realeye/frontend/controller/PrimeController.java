@@ -33,7 +33,7 @@ public class PrimeController {
         wrapper.eq("prime", 1);
         wrapper.eq("active",true);
         wrapper.orderByAsc("create_time");
-        wrapper.select("id","title","preview","username","create_time");
+        wrapper.select("id","title","preview","username","create_time","like_count","watch_count");
         Page<Community> page = new Page<>(pageNum, pageSize);
         Page<Community> list = communityService.page(page, wrapper);
 

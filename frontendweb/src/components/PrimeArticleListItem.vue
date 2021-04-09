@@ -1,19 +1,28 @@
 <template>
   <article class="post post-list">
     <div class="post-entry">
-      <div class="feature">
-        <p>{{ post.username }}</p>
-      </div>
       <h1 class="entry-title">
         <router-link :to="'/Article/'+post.id">
           <p>{{ post.title }}</p>
         </router-link>
       </h1>
       <div class="p-time">
-        <i class="iconfont iconmeditor-time"></i> {{ post.createTimeL | parseTime }}<i v-if="post.isHot"
-                                                                                       class="iconfont iconfire"
-                                                                                       style="margin-left: 5px;color: #ff6d6d;"></i>
+        <div>
+          <i class="el-icon-time"></i>
+          <span> {{ post.createTimeL | parseTime }}</span>
+        </div>
+        <br/>
+        <br/>
+        <div v-show="post.likeCount">
+          <i class="el-icon-check"></i>
+          <span> {{ post.likeCount }}</span>
+        </div>
+        <div v-show="post.watchCount">
+          <i class="el-icon-view"></i>
+          <span> {{ post.watchCount }}</span>
+        </div>
       </div>
+      <p style="font-size: 13px;margin: 0 0 0 17%;">作者: {{ post.username }}</p>
       <p class="summary">{{ post.preview }}</p>
     </div>
     <hr/>
@@ -39,27 +48,6 @@ export default {
 }
 
 .post-entry {
-  .feature {
-    position: absolute;
-    margin-top: 10px;
-
-    img {
-      width: 100px;
-      height: 100px;
-      object-fit: cover;
-      border-radius: 50%;
-      padding: 2px;
-      border: 1px solid #DADADA;
-      position: relative;
-      transition: all 0.2s linear;
-      overflow: hidden;
-
-      &:hover {
-        transform: scale(1.1, 1.1);
-        filter: contrast(130%);
-      }
-    }
-  }
 
   .entry-title {
     font-size: 21px;
@@ -87,7 +75,7 @@ export default {
     color: #989898;
     letter-spacing: 1px;
     font-family: din, 'Hiragino Sans GB', 'Microsoft Yahei', Arial, sans-serif;
-    display: flex;
+    //display: flex;
     align-items: center;
   }
 

@@ -1,6 +1,5 @@
 <template>
   <div class="articles">
-    <banner></banner>
     <div class="site-content animate">
       <main class="site-main">
         <article class="hentry">
@@ -17,11 +16,15 @@
             </div>
           </header>
           <!-- 正文输出 -->
-          <div v-html="articleData.content" class="entry-content">
+          <div class="entry-content" v-html="articleData.content">
           </div>
           <!-- 文章底部 -->
           <section-title>
             <footer class="post-footer">
+              <div class="post-like2" @click="addLike">
+                <i class="el-icon-check"></i>
+                <span>{{ articleData.likeCount }}</span>
+              </div>
               <!-- 阅读次数 -->
               <div class="post-like">
                 <i class="iconfont iconeyes"></i>
@@ -41,8 +44,8 @@ import Banner from '@/components/banner'
 import sectionTitle from '@/components/section-title'
 import comment from '@/components/comment'
 import menuTree from '@/components/menu-tree'
-import {fetchComment, formatDate} from '@/api'
-import {CommunityArticleCommentByIdMethod, CommunityArticleInfoByIdMethod} from '@/api/CommunityAPI';
+import {formatDate} from '@/api'
+import {AddLike, CommunityArticleInfoByIdMethod} from '@/api/CommunityAPI';
 
 export default {
   name: 'Article',
@@ -53,7 +56,8 @@ export default {
         title: undefined,
         createTime: undefined,
         content: undefined,
-        watchCount: undefined
+        watchCount: undefined,
+        likeCount: undefined,
       },
       showDonate: false,
       comments: []
@@ -66,6 +70,16 @@ export default {
     menuTree
   },
   methods: {
+    addLike() {
+      if (!this.$store.state.isLogin) {
+        this.$message.error("必须登录才能发表点赞!");
+        return;
+      }
+      AddLike(this.$route.params.id).then((res) => {
+        this.$message.success("点赞成功");
+        this.getArticleData();
+      })
+    },
     getArticleData() {
       CommunityArticleInfoByIdMethod(this.$route.params.id).then((res) => {
         if (res.data.code === 200) {
@@ -73,44 +87,14 @@ export default {
           this.articleData.title = res.data.data.title;
           this.articleData.content = res.data.data.content;
           this.articleData.watchCount = res.data.data.watchCount;
+          this.articleData.likeCount = res.data.data.likeCount;
           this.articleData.createTime = formatDate(res.data.data.createTime);
         }
       })
-    },
-    getComment() {
-      CommunityArticleCommentByIdMethod(this.$route.params.id).then((res) => {
-        if (res.data.data.length===0) {
-          console.log("aaa");
-          this.comments = [{
-              id: 1,
-              content: "暂无评论",
-              createTime: undefined
-          }]
-        } else {
-          this.comments = res.data.data || []
-        }
-      })
-
-      // fetchComment().then(res => {
-      //   this.comments = res.data || []
-      //   console.log(this.comments);
-      // }).catch(err => {
-      //   console.log(err)
-      // })
-    },
-    fetchH(arr, left, right) {
-      if (right) {
-        return arr.filter(item => item.offsetTop > left && item.offsetTop < right)
-      } else {
-        return arr.filter(item => item.offsetTop > left)
-      }
     }
   },
   mounted() {
     this.getArticleData();
-  },
-  created() {
-    this.getComment()
   }
 }
 </script>
@@ -160,7 +144,7 @@ article.hentry {
 
     .breadcrumbs {
       font-size: 14px;
-      color: #D2D2D2;
+      color: black;
       text-decoration: none;
       margin-bottom: 30px;
     }
@@ -182,6 +166,16 @@ article.hentry {
     }
 
     .post-like {
+      float: right;
+      margin: 7px 0 0 20px;
+    }
+
+    .post-like2 {
+
+      &:hover{
+        cursor: pointer;
+      }
+
       float: right;
       margin: 7px 0 0 20px;
     }
