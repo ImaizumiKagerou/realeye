@@ -11,8 +11,6 @@
           <i class="el-icon-time"></i>
           <span> {{ post.createTimeL | parseTime }}</span>
         </div>
-        <br/>
-        <br/>
         <div v-show="post.likeCount">
           <i class="el-icon-check"></i>
           <span> {{ post.likeCount }}</span>
