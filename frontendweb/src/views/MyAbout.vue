@@ -3,12 +3,23 @@
     <div class="site-content">
       <div class="content-warp">
         <div class="about-site about-info">
-          <section-title>个人信息</section-title>
-          <div class="info-card">
-            <p>用户名 : {{ userInfo.username }}</p>
-            <p>上次登录时间: {{ userInfo.lastLoginTime }}</p>
-            <p v-if="userInfo.email">绑定邮箱 : {{ userInfo.email }}</p>
-            <el-button v-else @click="showEmailDialog">绑定邮箱</el-button>
+          <div>
+            <section-title>
+              <i class="el-icon-user"></i>
+              {{ userInfo.username }}
+              <br/>
+              <br/>
+              <div style="font-size: 14px;">
+                <div style="display: inline-block;">
+                  <p v-if="userInfo.email">绑定邮箱 : {{ userInfo.email }}</p>
+                  <el-button v-else @click="showEmailDialog">绑定邮箱</el-button>
+                </div>
+                <div style="float: right;display: inline-block;">
+                  <i class="el-icon-watch"></i>
+                  上次登陆时间: {{ userInfo.lastLoginTime }}
+                </div>
+              </div>
+            </section-title>
           </div>
         </div>
         <div class="about-me about-info">
@@ -19,6 +30,7 @@
               <p v-show="!('申请中...'===userInfo.apikey)">过期时间为: {{ userInfo.expireTime }}</p>
             </div>
             <el-button v-else @click="applyKey">申请APIKey</el-button>
+            <a :href="$store.state.base_url+'api.docx'" class="el-button el-button--default">API文档下载</a>
           </div>
         </div>
       </div>
