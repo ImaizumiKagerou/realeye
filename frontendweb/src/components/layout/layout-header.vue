@@ -19,11 +19,22 @@
       <div class="menu-item">
         <a :href="$store.state.base_url+'api.docx'">API说明文档</a>
       </div>
+      <!--      <div class="menu-item hasChild">-->
+      <!--        <router-link to="/articles">推荐文章</router-link>-->
+      <!--      </div>-->
+      <!--      <div class="menu-item">-->
+      <!--        <router-link to="/communities">社区</router-link>-->
+      <!--      </div>-->
       <div class="menu-item hasChild">
-        <router-link to="/articles">推荐文章</router-link>
-      </div>
-      <div class="menu-item">
-        <router-link to="/communities">社区</router-link>
+        <a href="">社区</a>
+        <div class="childMenu">
+          <div class="sub-menu">
+            <router-link to="/communities">公共讨论版</router-link>
+          </div>
+          <div class="sub-menu">
+            <router-link to="/articles">推荐文章</router-link>
+          </div>
+        </div>
       </div>
       <div v-if="$store.state.isLogin" class="menu-item">
         <router-link to="/about">我的</router-link>
