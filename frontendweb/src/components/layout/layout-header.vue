@@ -26,7 +26,7 @@
       <!--        <router-link to="/communities">社区</router-link>-->
       <!--      </div>-->
       <div class="menu-item hasChild">
-        <a href="">社区</a>
+        <router-link to="/communities">社区</router-link>
         <div class="childMenu">
           <div class="sub-menu">
             <router-link to="/communities">公共讨论版</router-link>
