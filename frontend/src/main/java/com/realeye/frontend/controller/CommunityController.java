@@ -133,7 +133,6 @@ public class CommunityController {
         communityService.update(u);
 
         Community build = Community.builder()
-                .title("")
                 .content(content)
                 .active(true)
                 .userId(jwtToken.getId())

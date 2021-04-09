@@ -16,15 +16,15 @@
         </div>
         <br/>
         <br/>
-        <div>
+        <div v-show="post.likeCount">
           <i class="el-icon-check"></i>
           <span> {{ post.likeCount }}</span>
         </div>
-        <div>
+        <div v-show="post.watchCount">
           <i class="el-icon-view"></i>
           <span> {{ post.watchCount }}</span>
         </div>
-        <div>
+        <div v-show="post.commentCount">
           <i class="el-icon-s-comment"></i>
           <span> {{ post.commentCount }}</span>
         </div>

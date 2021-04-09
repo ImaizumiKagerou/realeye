@@ -145,7 +145,7 @@ export default {
       })
     },
     loadMore() {
-      CommunityListMethod(this.currPage + 1, 5, this.$route.params.words).then((res) => {
+      CommunityListMethod(this.currPage + 1, 5).then((res) => {
         this.postList = this.postList.concat(res.data.data.data || []);
         this.currPage = res.data.data.currPage;
         this.hasNextPage = res.data.data.hasNextPage;

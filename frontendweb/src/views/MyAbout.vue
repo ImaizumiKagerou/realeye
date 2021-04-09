@@ -35,6 +35,30 @@
         </div>
       </div>
     </div>
+    <div class="site-content">
+      <main class="site-main">
+        <span style="top: 100px;">
+          <el-select v-model="value" clearable placeholder="请选择" @change="getPostList">
+            <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </span>
+
+        <template v-for="item in postList">
+          <CommunityListItem :key="type+item.id+item.content" :post="item"></CommunityListItem>
+        </template>
+      </main>
+
+      <!--加载更多-->
+      <div v-show="hasNextPage" class="more">
+        <div class="more-btn" @click="loadMore">More</div>
+      </div>
+    </div>
 
     <el-dialog :visible.sync="emailDialogVisible" title="绑定邮箱" width="50%">
       <el-form label-width="70px">
@@ -54,16 +78,29 @@
 </template>
 <script>
 import sectionTitle from '@/components/section-title'
-import {BindEmailMethod, GetUserInfo} from '@/api/UserAPI';
+import {BindEmailMethod, GetUserInfo, MyAboutList} from '@/api/UserAPI';
 import {formatDate, formatDate2Date} from '@/api';
+import CommunityListItem from '@/components/CommunityListItem'
 
 export default {
   name: "MyAbout",
   data() {
     return {
+      value: "我的帖子",
+      options: [{
+        value: 'community',
+        label: '我的帖子'
+      }, {
+        value: 'comment',
+        label: '我的评论'
+      }],
+      postList: [],
+      currPage: 1,
+      hasNextPage: false,
       email: undefined,
       emailDialogVisible: false,
       apikeyDialogVisible: false,
+      type: undefined,
       userInfo: {
         username: undefined,
         email: undefined,
@@ -74,9 +111,27 @@ export default {
     }
   },
   components: {
-    sectionTitle
+    sectionTitle,
+    CommunityListItem
   },
   methods: {
+    getPostList(val) {
+      console.log('abc');
+      this.type = val;
+      MyAboutList(this.currPage, 5, this.type).then((res) => {
+        this.postList = res.data.data.data || [];
+        this.currPage = 1;
+        this.hasNextPage = res.data.data.hasNextPage;
+      })
+    },
+    loadMore() {
+      console.log('ccc');
+      MyAboutList(this.currPage + 1, 5, this.type).then((res) => {
+        this.postList = this.postList.concat(res.data.data.data || []);
+        this.currPage = res.data.data.currPage;
+        this.hasNextPage = res.data.data.hasNextPage;
+      })
+    },
     applyKey() {
       this.$confirm(
           "确定要申请吗？",
@@ -120,6 +175,7 @@ export default {
   },
   mounted() {
     this.getUserData();
+    this.getPostList('community');
   }
 }
 </script>
@@ -193,6 +249,55 @@ export default {
           opacity: 0.8;
         }
       }
+    }
+  }
+}
+
+.site-content {
+  .notify {
+    margin: 60px 0;
+    border-radius: 3px;
+
+    & > div {
+      padding: 20px;
+    }
+  }
+
+  .search-result {
+    padding: 15px 20px;
+    text-align: center;
+    font-size: 20px;
+    font-weight: 400;
+    border: 1px dashed #ddd;
+    color: #828282;
+  }
+}
+
+.site-main {
+  padding-top: 20px;
+
+  &.search {
+    padding-top: 0;
+  }
+}
+
+.more {
+  margin: 50px 0;
+
+  .more-btn {
+    width: 100px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    color: #ADADAD;
+    border: 1px solid #ADADAD;
+    border-radius: 20px;
+    margin: 0 auto;
+    cursor: pointer;
+
+    &:hover {
+      color: #8fd0cc;
+      border: 1px dashed #8fd0cc;
     }
   }
 }

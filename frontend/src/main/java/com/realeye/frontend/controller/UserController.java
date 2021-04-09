@@ -3,10 +3,14 @@ package com.realeye.frontend.controller;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.realeye.frontend.entity.APIKey;
+import com.realeye.frontend.entity.Community;
+import com.realeye.frontend.entity.MyPageVO;
 import com.realeye.frontend.entity.User;
-import com.realeye.frontend.service.UserService;
 import com.realeye.frontend.service.APIKeyService;
+import com.realeye.frontend.service.CommunityService;
+import com.realeye.frontend.service.UserService;
 import com.realeye.frontend.utils.ResultBody;
 import com.realeye.frontend.utils.jwt.JWTToken;
 import com.realeye.frontend.utils.jwt.JwtAuthenticatioToken;
@@ -26,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.function.Consumer;
 
 @RestController
 @RequestMapping("/user")
@@ -41,6 +46,9 @@ public class UserController {
 
     @Resource
     private APIKeyService apiKeyService;
+
+    @Resource
+    private CommunityService communityService;
 
     @GetMapping("/register")
     public ResultBody register(@NotNull String username, @NotNull String password, HttpServletRequest request) {
@@ -118,6 +126,64 @@ public class UserController {
         userService.update(u);
 
         return ResultBody.newSuccessInstance();
+    }
+
+    @GetMapping("/myAboutList")
+    @JwtTokenInit
+    public ResultBody myAboutList(@ApiIgnore JWTToken jwtToken,
+                                  @NotNull Integer pageNum,
+                                  @NotNull Integer pageSize,
+                                  String type) {
+
+        QueryWrapper<Community> wrapper = new QueryWrapper<>();
+
+        wrapper.eq("active", true);
+        wrapper.eq("prime", false);
+        wrapper.eq("user_id",jwtToken.getId());
+        if (type.equals("community")){
+            wrapper.isNotNull("title");
+        } else if (type.equals("comment")){
+            wrapper.isNull("title");
+        } else {
+            return ResultBody.newErrorInstance();
+        }
+
+        wrapper.orderByDesc("create_time");
+
+        Page<Community> page = new Page<>(pageNum, pageSize);
+        Page<Community> list = communityService.page(page, wrapper);
+
+        list.getRecords().forEach(new Consumer<Community>() {
+            @Override
+            public void accept(Community community) {
+                community.setCreateTimeL(community.getCreateTime().getTime());
+
+                if (type.equals("comment")){
+                    QueryWrapper<Community> wrapper = new QueryWrapper<>();
+
+                    wrapper.eq("active", true);
+                    wrapper.eq("prime", false);
+                    wrapper.eq("id",community.getParentId());
+
+                    Community one = communityService.getOne(wrapper);
+
+                    community.setId(one.getId());
+                    community.setTitle(one.getTitle());
+                    community.setContent("评论内容: "+community.getContent());
+                }
+
+            }
+        });
+
+        MyPageVO build = MyPageVO.builder()
+                .data(list.getRecords())
+                .hasNextPage(list.hasNext())
+                .currPage(pageNum)
+                .total(list.getTotal())
+                .build();
+
+        return ResultBody.newSuccessInstance(build);
+
     }
 
 }

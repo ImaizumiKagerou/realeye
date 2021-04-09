@@ -56,3 +56,16 @@ export const GetUserInfo = () => {
         store.state.base_url + "user/info",
     )
 }
+
+export const MyAboutList = (pageNum, pageSize, sort) => {
+    return axios.get(
+        store.state.base_url + "user/myAboutList",
+        {
+            params: {
+                pageNum,
+                pageSize,
+                'type': sort
+            }
+        }
+    )
+}
