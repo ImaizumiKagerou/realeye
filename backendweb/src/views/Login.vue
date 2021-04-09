@@ -63,7 +63,7 @@ export default {
                 if (res.data.code === 200) {
                   this.$message.success("登录成功");
                   localStorage.setItem("ms_username", this.param.username);
-                  localStorage.setItem("jwtToken",res.data.data);
+                  localStorage.setItem("jwtToken", res.data.data);
                   this.$router.push("/");
                 } else {
                   this.$message.error("用户名或密码错误");

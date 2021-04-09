@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -38,11 +39,11 @@ public class SearchController {
     private APIKeyService apiKeyService;
 
     @GetMapping("/main")
-    public ResultBody normalSearch(@NotNull String keyword, @NotNull Integer pageNum, @NotNull Integer pageSize) throws IOException, SolrServerException {
+    public ResultBody normalSearch(@NotBlank String keyword, @NotNull Integer pageNum, @NotNull Integer pageSize) throws IOException, SolrServerException {
 
         SolrQuery solrQuery = new SolrQuery();
         solrQuery.setQuery("keyword:" + keyword);
-        solrQuery.setSort("update_time", SolrQuery.ORDER.desc);
+//        solrQuery.setSort("update_time", SolrQuery.ORDER.desc);
         //设置查询的条数
         solrQuery.setRows(pageSize);
         //设置查询的开始
@@ -87,6 +88,7 @@ public class SearchController {
         }
 
         Map<String, Map<String, List<String>>> highlighting = response.getHighlighting();
+
         list.forEach(solrResultVO -> {
             Map<String, List<String>> listMap = highlighting.get(solrResultVO.getIdStr());
             if (null != listMap) {
@@ -98,7 +100,7 @@ public class SearchController {
 
         MyPageVO myPageVO = MyPageVO.builder()
                 .currPage(pageNum)
-                .hasNextPage(response.getResults().getNumFound()-response.getResults().getStart()>pageSize)
+                .hasNextPage(response.getResults().getNumFound() - response.getResults().getStart() > pageSize)
                 .total(response.getResults().getNumFound())
                 .data(list)
                 .build();
@@ -107,15 +109,15 @@ public class SearchController {
     }
 
     @GetMapping("/api")
-    public ResultBody APISearch(@NotNull String apikey,@NotNull String keyword, @NotNull Integer pageNum, @NotNull Integer pageSize) throws IOException, SolrServerException {
+    public ResultBody APISearch(@NotNull String apikey, @NotNull String keyword, @NotNull Integer pageNum, @NotNull Integer pageSize) throws IOException, SolrServerException {
 
         QueryWrapper<APIKey> q = new QueryWrapper<>();
-        q.eq("apikey",apikey);
+        q.eq("apikey", apikey);
         APIKey one = apiKeyService.getOne(q);
         if (one == null) {
-            return ResultBody.newErrorInstance(403,"apikey有误");
+            return ResultBody.newErrorInstance(403, "apikey有误");
         }
 
-        return ResultBody.newSuccessInstance(normalSearch(keyword,pageNum,pageSize));
+        return ResultBody.newSuccessInstance(normalSearch(keyword, pageNum, pageSize));
     }
 }

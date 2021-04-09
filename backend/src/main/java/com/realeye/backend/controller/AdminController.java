@@ -21,7 +21,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 @RestController
 @RequestMapping("/admin")
@@ -37,7 +37,7 @@ public class AdminController {
 
     @ApiOperation("登陆")
     @GetMapping("/login")
-    public ResultBody login(@NotNull String username, @NotNull String password, HttpServletRequest request) {
+    public ResultBody login(@NotBlank String username, @NotBlank String password, HttpServletRequest request) {
 
         QueryWrapper<AdminUser> wrapper = new QueryWrapper<>();
         wrapper.eq("username", username);
