@@ -44,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 // 跨域预检请求
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-//                .antMatchers("/**").permitAll()
+                .antMatchers("/**").permitAll()
                 .antMatchers("/admin/login").permitAll()
                 // swagger
                 .antMatchers("/swagger-ui.html").permitAll()

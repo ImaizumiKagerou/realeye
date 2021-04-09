@@ -4,7 +4,7 @@ export default createStore({
     state: {
         tagsList: [],
         collapse: false,
-        base_url: "http://127.0.0.1:8082/backend/"
+        base_url: "http://127.0.0.1:8082/"
     },
     mutations: {
         delTagsItem(state, data) {

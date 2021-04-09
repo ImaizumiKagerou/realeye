@@ -8,7 +8,7 @@ Vue.use(Vuex)
 const runAt = '1589878800000';
 let timer = null;
 const state = {
-    base_url: "http://127.0.0.1:8081/frontend/",
+    base_url: "http://127.0.0.1:8081/",
     loading: false,
     runTimeInterval: '',
     socials: '',
