@@ -19,12 +19,6 @@
       <div class="menu-item">
         <a :href="$store.state.base_url+'api.docx'">API说明文档</a>
       </div>
-      <!--      <div class="menu-item hasChild">-->
-      <!--        <router-link to="/articles">推荐文章</router-link>-->
-      <!--      </div>-->
-      <!--      <div class="menu-item">-->
-      <!--        <router-link to="/communities">社区</router-link>-->
-      <!--      </div>-->
       <div class="menu-item hasChild">
         <router-link to="/communities">社区</router-link>
         <div class="childMenu">

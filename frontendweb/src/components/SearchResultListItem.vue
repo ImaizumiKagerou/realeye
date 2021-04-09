@@ -1,19 +1,29 @@
 <template>
-  <article class="post post-list">
-    <div class="post-entry">
-      <h1 class="entry-title">
-        <p>类型: {{ post.title }}</p>
-      </h1>
-      <div class="p-time">
-        <i class="iconfont iconmeditor-time"></i> {{ post.updateTime | parseTime }}<i v-if="post.isHot"
-                                                                                      class="iconfont iconfire"
-                                                                                      style="margin-left: 5px;color: #ff6d6d;"></i>
+  <div>
+    <article class="post post-list">
+      <div class="post-entry">
+        <h1 class="entry-title">
+          <p>类型: {{ post.title }}</p>
+        </h1>
+        <div class="p-time">
+          <div>
+            <i class="el-icon-time"></i>
+            <span> {{ post.updateTime | parseTime }}</span>
+          </div>
+          <br>
+          <br>
+          <br>
+          <br>
+          <el-button :type="getType(post.stamp)" size="mini" @click="openDialog(post.stamp)">{{ post.type }}</el-button>
+        </div>
+        <p class="summary" v-html="'严重程度: '+post.stamp+'<br>具体内容: '+post.content">
+        </p>
       </div>
-      <p class="summary" v-html="'严重程度: '+post.stamp+'<br>具体内容: '+post.content">
-      </p>
-    </div>
-    <hr/>
-  </article>
+      <hr/>
+    </article>
+
+  </div>
+
 </template>
 
 <script>
@@ -23,6 +33,23 @@ export default {
   props: {
     post: {
       type: Object
+    }
+  },
+  methods: {
+    openDialog(stamp) {
+      this.$parent.openDialog(stamp);
+    },
+    getType(val) {
+      switch (val) {
+        case 'Phish':
+        case 'email spammer':
+        case 'attacker':
+        case 'BlackList':
+          return 'danger'
+        case 'unknown':
+        default:
+          return "warning"
+      }
     }
   }
 }
@@ -83,7 +110,7 @@ export default {
     color: #989898;
     letter-spacing: 1px;
     font-family: din, 'Hiragino Sans GB', 'Microsoft Yahei', Arial, sans-serif;
-    display: flex;
+    //display: flex;
     align-items: center;
   }
 

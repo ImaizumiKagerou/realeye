@@ -1,10 +1,12 @@
 package com.realeye.frontend.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.realeye.frontend.entity.APIKey;
-import com.realeye.frontend.entity.MyPageVO;
-import com.realeye.frontend.entity.SolrResultVO;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.realeye.frontend.entity.*;
 import com.realeye.frontend.service.APIKeyService;
+import com.realeye.frontend.service.DomainTableService;
+import com.realeye.frontend.service.IpTableService;
+import com.realeye.frontend.service.UrlTableService;
 import com.realeye.frontend.utils.ResultBody;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -22,9 +24,7 @@ import javax.annotation.Resource;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -37,6 +37,15 @@ public class SearchController {
 
     @Resource
     private APIKeyService apiKeyService;
+
+    @Resource
+    private IpTableService ipTableService;
+
+    @Resource
+    private UrlTableService urlTableService;
+
+    @Resource
+    private DomainTableService domainTableService;
 
     @GetMapping("/main")
     public ResultBody normalSearch(@NotBlank String keyword, @NotNull Integer pageNum, @NotNull Integer pageSize) throws IOException, SolrServerException {
@@ -77,12 +86,16 @@ public class SearchController {
 
         QueryResponse response = solrClient.query(solrQuery);
         for (SolrDocument result : response.getResults()) {
+
+            String type = getStampType(result.getFieldValue("stamp").toString());
+
             SolrResultVO build = SolrResultVO.builder()
                     .idStr(result.getFieldValue("id").toString())
                     .content(result.getFieldValue("content").toString())
                     .stamp(result.getFieldValue("stamp").toString())
                     .source(result.getFieldValue("source").toString())
                     .updateTime(Long.parseLong(result.getFieldValue("update_time").toString()))
+                    .type(type)
                     .build();
             list.add(build);
         }
@@ -119,5 +132,72 @@ public class SearchController {
         }
 
         return ResultBody.newSuccessInstance(normalSearch(keyword, pageNum, pageSize));
+    }
+
+    @GetMapping("/stamp")
+    public ResultBody StampAbout(@NotBlank String stamp) {
+        switch (stamp) {
+            case "attacker":
+            case "email spammer":
+            case "unknown":
+                //ip
+                Page<IpTable> ipPage = new Page<>(1, 5);
+                QueryWrapper<IpTable> ipq = new QueryWrapper<>();
+                ipq.orderByDesc("update_time");
+                List<IpTable> ipList = ipTableService.page(ipPage,ipq).getRecords();
+                List<Map<String,String>> list = new ArrayList<>(5);
+                for (IpTable ipTable : ipList) {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("updateTime",ipTable.getUpdateTime());
+                    map.put("content",ipTable.getIp());
+                    list.add(map);
+                }
+                return ResultBody.newSuccessInstance(list);
+            case "Phish":
+                //url
+                Page<UrlTable> urlPage = new Page<>(1, 5);
+                QueryWrapper<UrlTable> urlq = new QueryWrapper<>();
+                urlq.orderByDesc("update_time");
+                List<UrlTable> urlList = urlTableService.page(urlPage,urlq).getRecords();
+                list = new ArrayList<>(5);
+                for (UrlTable urlTable : urlList) {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("updateTime",urlTable.getUpdateTime());
+                    map.put("content",urlTable.getUrl());
+                    list.add(map);
+                }
+                return ResultBody.newSuccessInstance(list);
+            case "BlackList":
+            default:
+                //domain
+                Page<DomainTable> domainPage = new Page<>(1, 5);
+                QueryWrapper<DomainTable> domainq = new QueryWrapper<>();
+                domainq.orderByDesc("update_time");
+                List<DomainTable> domainList = domainTableService.page(domainPage,domainq).getRecords();
+                list = new ArrayList<>(5);
+                for (DomainTable domainTable : domainList) {
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("updateTime",domainTable.getUpdateTime());
+                    map.put("content",domainTable.getDomain());
+                    list.add(map);
+                }
+                return ResultBody.newSuccessInstance(list);
+        }
+    }
+
+    private String getStampType(String stamp) {
+        switch (stamp) {
+            case "Phish":
+                return "钓鱼网站";
+            case "email spammer":
+                return "垃圾邮件";
+            case "attacker":
+                return "有攻击行为";
+            case "BlackList":
+                return "有黑名单行为";
+            case "unknown":
+            default:
+                return "存在可疑行为";
+        }
     }
 }

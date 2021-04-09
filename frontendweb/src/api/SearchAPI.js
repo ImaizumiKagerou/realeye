@@ -28,3 +28,14 @@ export const SearchAPIMethod = (pageNum,pageSize,keyword)=>{
         }
     )
 }
+
+export const SearchAboutMethod = (stamp)=>{
+    return axios.get(
+        store.state.base_url+"search/stamp",
+        {
+            params:{
+                stamp
+            }
+        }
+    )
+}

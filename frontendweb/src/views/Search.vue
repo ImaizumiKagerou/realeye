@@ -4,7 +4,7 @@
       <!--通知栏-->
       <div class="notify">
         <div v-if="hideSlogan" class="search-result">
-          <span v-if="searchWords">搜索结果："{{ searchWords.replaceAll("+", " ") }}" 相关文章</span>
+          <span v-if="searchWords">搜索结果："{{ searchWords.replaceAll("+", " ") }}" </span>
           <span v-else-if="category">分类 "{{ category }}" 相关文章</span>
         </div>
         <quote v-else>{{ notice }}</quote>
@@ -23,6 +23,21 @@
         <div class="more-btn" @click="loadMore">More</div>
       </div>
     </div>
+
+    <!-- 新增弹出框 -->
+    <el-dialog :title="type+'相关数据'" :visible.sync="typeVisible" width="50%">
+
+      <el-table :data="typeForm">
+        <el-table-column label="相似内容" property="content" width="200"></el-table-column>
+      </el-table>
+
+      <template #footer>
+        <span class="dialog-footer">
+            <el-button type="primary" @click="closeDialog">确 定</el-button>
+        </span>
+      </template>
+    </el-dialog>
+
   </div>
 </template>
 
@@ -33,7 +48,7 @@ import Post from '@/components/post'
 import SmallIco from '@/components/small-ico'
 import Quote from '@/components/quote'
 import SearchResultListItem from '@/components/SearchResultListItem'
-import {SearchAPIMethod} from '@/api/SearchAPI';
+import {SearchAboutMethod, SearchAPIMethod} from '@/api/SearchAPI';
 
 export default {
   name: 'Search',
@@ -42,7 +57,10 @@ export default {
     return {
       postList: [],
       currPage: 1,
-      hasNextPage: false
+      hasNextPage: false,
+      typeVisible: false,
+      typeForm: {},
+      type: undefined,
     }
   },
   components: {
@@ -68,6 +86,32 @@ export default {
     }
   },
   methods: {
+    openDialog(stamp) {
+      SearchAboutMethod(stamp).then((res) => {
+        switch (stamp) {
+          case "Phish":
+            this.type = "钓鱼网站";
+            break;
+          case "email spammer":
+            this.type = "垃圾邮件";
+            break;
+          case "attacker":
+            this.type = "有攻击行为";
+            break;
+          case "BlackList":
+            this.type = "有黑名单行为";
+            break;
+          case "unknown":
+          default:
+            this.type = "存在可疑行为";
+        }
+        this.typeVisible = true;
+        this.typeForm = res.data.data;
+      })
+    },
+    closeDialog() {
+      this.typeVisible = false;
+    },
     fetchList() {
       SearchAPIMethod(1, 5, this.$route.params.words).then((res) => {
         console.log(res);

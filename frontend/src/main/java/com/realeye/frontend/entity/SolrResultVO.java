@@ -23,4 +23,6 @@ public class SolrResultVO {
 
     private String title;
 
+    private String type;
+
 }
