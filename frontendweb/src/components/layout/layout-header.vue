@@ -16,19 +16,22 @@
       <div class="menu-item">
         <router-link to="/">首页</router-link>
       </div>
+      <div class="menu-item">
+        <a :href="$store.state.base_url+'api.docx'">API说明文档</a>
+      </div>
       <div class="menu-item hasChild">
         <router-link to="/articles">推荐文章</router-link>
       </div>
       <div class="menu-item">
         <router-link to="/communities">社区</router-link>
       </div>
-      <div class="menu-item" v-if="$store.state.isLogin">
+      <div v-if="$store.state.isLogin" class="menu-item">
         <router-link to="/about">我的</router-link>
       </div>
-      <div class="menu-item" v-if="$store.state.isLogin">
+      <div v-if="$store.state.isLogin" class="menu-item">
         <a class="atest" @click="logout">登出</a>
       </div>
-      <div class="menu-item" v-if="!$store.state.isLogin">
+      <div v-if="!$store.state.isLogin" class="menu-item">
         <router-link to="/login">注册/登陆</router-link>
       </div>
     </div>
@@ -80,11 +83,21 @@ export default {
         console.log(err)
       })
     },
-    logout(){
-      this.$store.commit("removeLoginTokenStorage");
-      if (!this.$route.fullPath==="/"){
-        this.$router.push("/");
-      }
+    logout() {
+      this.$confirm(
+          "确定要退出吗？",
+          "警告",
+          {
+            type: "warning"
+          })
+          .then(() => {
+            this.$store.commit("removeLoginTokenStorage");
+            if (!this.$route.fullPath === "/") {
+              this.$router.push("/");
+            }
+          })
+          .catch(() => {
+          });
     }
   }
 }
@@ -92,7 +105,7 @@ export default {
 
 <style lang="less" scoped>
 
-.atest{
+.atest {
   cursor: pointer;
 }
 
