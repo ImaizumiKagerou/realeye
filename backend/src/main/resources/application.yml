@@ -10,5 +10,6 @@ mybatis-plus:
       id-type: auto
 server:
   port: 8082
+  max-http-header-size: 102400
   servlet:
     context-path: /backend
